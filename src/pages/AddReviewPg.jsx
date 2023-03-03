@@ -1,7 +1,8 @@
 import React from 'react';
+import AddReview from '../feature/detail/AddReview';
 
-function AddReview() {
-  return <div>AddReview</div>;
+function AddReviewPg() {
+  return <AddReview />;
 }
 
-export default AddReview;
+export default AddReviewPg;
