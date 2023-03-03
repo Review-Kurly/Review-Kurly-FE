@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Router from './shared/Router';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ThemeProvider } from 'styled-components';
+import {
+  FlexRow,
+  FlexCol,
+  DarkBlur,
+  CL,
+  FS,
+  Shadow,
+  FlexRowBetween,
+} from './styles/theme/Theme';
+
+const queryClient = new QueryClient();
 
 function App() {
+  const theme = {
+    FlexRow,
+    FlexRowBetween,
+    FlexCol,
+    CL,
+    FS,
+    DarkBlur,
+    Shadow,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <Router />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </>
   );
 }
 
