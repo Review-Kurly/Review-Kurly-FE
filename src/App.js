@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from './shared/Router';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from 'styled-components';
 import {
   FlexRow,
@@ -11,8 +10,6 @@ import {
   Shadow,
   FlexRowBetween,
 } from './styles/theme/Theme';
-
-const queryClient = new QueryClient();
 
 function App() {
   const theme = {
@@ -27,11 +24,9 @@ function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <Router />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
     </>
   );
 }
