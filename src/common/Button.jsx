@@ -31,14 +31,26 @@ const ButtonWrapper = styled.button`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'pointer')};
 
   ${(props) =>
-    props.login &&
+    props.addAndHeart &&
     css`
-      padding: 1rem;
-      font-size: 30px;
-      width: 29rem;
-      height: 5rem;
-      background-color: ${(props) => props.theme.CL.brandColor};
+      margin-right: 10px;
+      width: 35px;
+      height: 35px;
+      font-size: 1.5rem;
+      padding: 0;
     `}
+
+  ${(props) =>
+    props.search &&
+    css`
+      position: relative;
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      padding: 0;
+      color: ${(props) => props.theme.CL.brandColor};
+    `}
+
 
   & {
     cursor: pointer;
