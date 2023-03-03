@@ -9,7 +9,6 @@ import useInputOnChange from '../../feature/hooks/useInputOnChange';
 
 export default function Header() {
   const [{ search }, titleInputHanlder] = useInputOnChange({ search: '' });
-  //console.log(search);
 
   const navigate = useNavigate();
 
@@ -34,7 +33,7 @@ export default function Header() {
             <LogoLink to="/">리뷰컬리</LogoLink>
           </HeaderLogoContainer>
           {/* 검색창 */}
-          <HeaderSearchWrapper>
+          <HeaderSearchForm>
             <HeaderSearchContainer>
               <HeaderSearchInput
                 name="search"
@@ -45,7 +44,7 @@ export default function Header() {
                 <FaSearch size={'1.25rem'} />
               </Button>
             </HeaderSearchContainer>
-          </HeaderSearchWrapper>
+          </HeaderSearchForm>
           {/* 좋아요 & 게시글 등록 */}
           <HeaderAddReviewWrapper>
             <AddReviewContainer>
@@ -148,7 +147,7 @@ const LogoLink = styled(Link)`
   }
 `;
 
-const HeaderSearchWrapper = styled.div`
+const HeaderSearchForm = styled.form`
   position: relative;
   width: 1050px;
   margin: 0px auto;
@@ -170,6 +169,11 @@ const HeaderSearchContainer = styled.div`
   border-radius: 6px;
   background-color: #ffffff;
   box-shadow: #ffffff 0px 0px 0px 1px inset;
+  button {
+    svg {
+      color: ${(props) => props.theme.CL.brandColor};
+    }
+  }
 `;
 
 const HeaderSearchInput = styled.input`
@@ -180,9 +184,7 @@ const HeaderSearchInput = styled.input`
   letter-spacing: -0.33px;
 `;
 
-const HeaderAddReviewWrapper = styled(
-  HeaderSearchWrapper.withComponent('div')
-)``;
+const HeaderAddReviewWrapper = styled(HeaderSearchForm.withComponent('div'))``;
 
 const AddReviewContainer = styled.div`
   display: flex;
