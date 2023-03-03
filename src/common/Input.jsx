@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { css } from 'styled-components';
 
-export default function Input(props) {
+export function Input(props) {
   return <InputWrapper {...props} />;
 }
 
@@ -31,4 +32,57 @@ const InputWrapper = styled.input`
   color: ${(props) => props.color};
   outline: ${(props) => props.outline};
   box-sizing: ${(props) => props.boxSizing};
+
+  ${(props) =>
+    props.reviewInput &&
+    css`
+      height: 180px;
+    `}
+`;
+
+export function AddReviewInputLayout(props) {
+  return <LayoutWrapper {...props}>{props.children}</LayoutWrapper>;
+}
+
+AddReviewInputLayout.defaultProps = {
+  width: '600px',
+  height: '68px',
+  padding: '10px 20px',
+};
+
+const LayoutWrapper = styled.div`
+  width: 600px;
+  height: ${(props) => props.height};
+  padding: 10px 20px;
+  ${(props) => props.theme.FlexRow};
+
+  ${(props) =>
+    props.inputLayout &&
+    css`
+      height: 204px;
+    `}
+`;
+
+export function AddReviewMiniBox(props) {
+  return <MiniBoxWrapper {...props}>{props.children}</MiniBoxWrapper>;
+}
+
+AddReviewMiniBox.defaultProps = {
+  width: '139px',
+  height: '48px',
+  padding: '12px 0px 0px',
+  fontweight: 500,
+  lineheight: '20px',
+};
+
+const MiniBoxWrapper = styled.div`
+  width: 139px;
+  height: 48px;
+  padding: 12px 0px 0px;
+  ${(props) =>
+    props.inputMiniBox &&
+    css`
+      align-items: 'center';
+      height: 180px;
+    `}
 `;
