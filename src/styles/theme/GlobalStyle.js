@@ -70,6 +70,7 @@ export const GlobalStyle = createGlobalStyle`
     //반드시 overflow: overlay해야 -webkit-scrollbar-track 투명도를 설정할 수 있다.
     body {
       overflow: overlay;
+      overflow-x: hidden;
     }
     ::-webkit-scrollbar {
       width: 10px;
