@@ -51,6 +51,31 @@ const ButtonWrapper = styled.button`
       color: ${(props) => props.theme.CL.brandColor};
     `}
 
+    ${(props) =>
+    props.addReview &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 16px;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: white;
+      background-color: ${(props) => props.theme.CL.brandColor};
+    `}
+
+
+${(props) =>
+    props.cancel &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 16px;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: ${(props) => props.theme.CL.brandColor};
+      border: 1px solid ${(props) => props.theme.CL.brandColor};
+      background-color: white;
+    `}
 
   & {
     cursor: pointer;
