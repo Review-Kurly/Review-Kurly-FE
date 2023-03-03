@@ -38,20 +38,36 @@ const InputWrapper = styled.input`
     css`
       height: 180px;
     `}
+
+  ${(props) =>
+    props.singupInput &&
+    css`
+      width: 330px;
+      height: 46px;
+      padding: 0px 11px 1px 15px;
+    `}
+
+    ${(props) =>
+    props.loginInput &&
+    css`
+      width: 340px;
+      height: 54px;
+      padding: 0px 11px 1px 15px;
+    `}
 `;
 
-export function AddReviewInputLayout(props) {
+export function InputLayout(props) {
   return <LayoutWrapper {...props}>{props.children}</LayoutWrapper>;
 }
 
-AddReviewInputLayout.defaultProps = {
-  width: '600px',
+InputLayout.defaultProps = {
+  width: '640px',
   height: '68px',
   padding: '10px 20px',
 };
 
 const LayoutWrapper = styled.div`
-  width: 600px;
+  width: ${(props) => props.width};
   height: ${(props) => props.height};
   padding: 10px 20px;
   ${(props) => props.theme.FlexRow};
@@ -59,15 +75,16 @@ const LayoutWrapper = styled.div`
   ${(props) =>
     props.inputLayout &&
     css`
-      height: 204px;
+      width: 640px;
+      height: 200px;
     `}
 `;
 
-export function AddReviewMiniBox(props) {
+export function MiniBox(props) {
   return <MiniBoxWrapper {...props}>{props.children}</MiniBoxWrapper>;
 }
 
-AddReviewMiniBox.defaultProps = {
+MiniBox.defaultProps = {
   width: '139px',
   height: '48px',
   padding: '12px 0px 0px',
@@ -79,6 +96,7 @@ const MiniBoxWrapper = styled.div`
   width: 139px;
   height: 48px;
   padding: 12px 0px 0px;
+
   ${(props) =>
     props.inputMiniBox &&
     css`
