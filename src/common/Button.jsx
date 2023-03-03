@@ -75,7 +75,62 @@ ${(props) =>
       color: ${(props) => props.theme.CL.brandColor};
       border: 1px solid ${(props) => props.theme.CL.brandColor};
       background-color: white;
+      margin-right: 20px;
     `}
+
+
+    ${(props) =>
+    props.overlap &&
+    css`
+      font-size: 14px;
+      display: block;
+      padding: 0px 10px;
+      text-align: center;
+      overflow: hidden;
+      width: 122px;
+      height: 44px;
+      color: ${(props) => props.theme.CL.brandColor};
+      border: 1px solid ${(props) => props.theme.CL.brandColor};
+      background-color: white;
+      border-radius: 3px;
+    `}
+
+
+    ${(props) =>
+    props.login &&
+    css`
+      margin: 0px;
+      margin-bottom: 6px;
+      padding: 0rem 0.625rem;
+      font-size: 16px;
+      width: 340px;
+      height: 54px;
+      text-align: center;
+      color: white;
+      font-weight: 500;
+      border-radius: 3px;
+      background-color: ${(props) => props.theme.CL.brandColor};
+    `}
+
+
+    ${(props) =>
+    props.signUp &&
+    css`
+      margin: 0px;
+      padding: 0rem 0.625rem;
+      font-size: 16px;
+      width: 340px;
+      height: 54px;
+      text-align: center;
+      font-weight: 500;
+      border-radius: 3px;
+      color: ${(props) => props.theme.CL.brandColor};
+      border: 1px solid ${(props) => props.theme.CL.brandColor};
+      background-color: white;
+    `}
+
+
+      
 
   & {
     cursor: pointer;
