@@ -4,13 +4,22 @@ import { Input } from '../../components/Input';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import useInputOnChange from '../../feature/hooks/useInputOnChange';
-import { api } from '../../modules/api/api';
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import { postLogin } from '../../modules/api/api';
+import { useMutation, useQuery } from 'react-query';
 
 export default function LogIn() {
   const navigate = useNavigate();
   const moveToSignup = () => navigate('/sign-up');
+
+  // const {isLoading, isError, data}=useQuery("login",postLogin)
+  const login = useMutation(postLogin, {
+    onSuccess: () => {
+      navigate('/');
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 
   const [formValues, setFormValues, resetFormValues] = useInputOnChange({
     username: '',
@@ -19,22 +28,11 @@ export default function LogIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await api.post('api/users/login', formValues);
-      const token = response.data.token;
-
-      //토큰 헤더에 저장
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-      Cookies.set('token', token, { expires: 7 }); // 7일 동안 유효한 쿠키 저장
-      console.log('로그인 성공');
-    } catch (error) {
-      console.error(error);
-      console.log('로그인 실패');
+    if (formValues.username !== '' && formValues.password !== '') {
+      login.mutate(formValues);
     }
-    resetFormValues();
   };
+  console.log(formValues);
 
   return (
     <>
@@ -61,6 +59,7 @@ export default function LogIn() {
             placeholder="비밀번호를 입력해주세요"
           />{' '}
         </LogInInputLayout>
+        {login.error?.response.data.data.errorMessage}
         <LogInInputLayout />
         <Button login>로그인</Button>
         <Button type="button" onClick={moveToSignup} signUp>
