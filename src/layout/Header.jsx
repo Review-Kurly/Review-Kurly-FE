@@ -6,26 +6,48 @@ import { BsHeart, BsClipboardPlus } from 'react-icons/bs';
 import logo from '../styles/img/logo.svg';
 import useInputOnChange from '../feature/hooks/useInputOnChange';
 import Button from '../components/Button';
+import Cookies from 'js-cookie';
+import { logoutSuccess } from '../redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Header() {
   const [{ search }, titleInputHanlder] = useInputOnChange({ search: '' });
-
   const navigate = useNavigate();
-
   const moveToAddReview = () => navigate('/add-review');
+  const moveToHome = () => navigate('/');
+
+  //스토어에서 로그인이 되어있는지 체크
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
+
+  //로그아웃 핸들러
+  function handleLogout(e) {
+    e.preventDefault();
+    localStorage.removeItem('userInfo');
+    Cookies.remove('accessJWTToken');
+    dispatch(logoutSuccess());
+    moveToHome();
+  }
 
   return (
     <>
       {/* 로고 & 검색창 */}
       <HeaderStyles>
         <HeaderWrapper>
-          <HeaderLoginWrapper>
-            <Login to={'/sign-up'} color={'#5F0080'}>
-              회원가입
-            </Login>
-            <div />
-            <Login to={'/login'}>로그인</Login>
-          </HeaderLoginWrapper>
+          {isLoggedIn ? (
+            <HeaderLoginWrapper>
+              <Login onClick={handleLogout}>로그아웃</Login>
+            </HeaderLoginWrapper>
+          ) : (
+            <HeaderLoginWrapper>
+              <Login to={'/sign-up'} color={'#5F0080'}>
+                회원가입
+              </Login>
+              <div />
+              <Login to={'/login'}>로그인</Login>
+            </HeaderLoginWrapper>
+          )}
+
           <HeaderLogoContainer>
             <Link to="/">
               <LogoImg src={logo} alt="리뷰컬리" />

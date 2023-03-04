@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputLayout,
@@ -11,9 +11,15 @@ import useLoginInput from '../../feature/hooks/useLoginInput';
 import { useMutation } from 'react-query';
 import { postRegister } from '../../modules/api/api';
 import { useNavigate } from 'react-router-dom';
+import isLogin from '../../modules/util/isLogin';
 
 export default function SignUp() {
   const navigate = useNavigate();
+
+  //토큰이 존재한다면 홈으로 리다이렉트
+  useEffect(() => {
+    if (isLogin() === true) navigate('/');
+  });
 
   const idRegex = /^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/;
   const [inputId, inputIdHandler, alertId, checkIdRegex] = useLoginInput(
