@@ -7,12 +7,13 @@ import {
   LoginAlertSpan,
 } from '../../components/Input';
 import Button from '../../components/Button';
-import { useNavigate } from 'react-router-dom';
 import useLoginInput from '../../feature/hooks/useLoginInput';
+import { useMutation } from 'react-query';
+import { postRegister } from '../../modules/api/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const moveToLogin = () => navigate('/login');
 
   const idRegex = /^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/;
   const [inputId, inputIdHandler, alertId, checkIdRegex] = useLoginInput(
@@ -23,7 +24,7 @@ export default function SignUp() {
     idRegex
   );
 
-  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,}$/;
+  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$/;
   const [
     inputNickName,
     inputNickNameHandler,
@@ -41,11 +42,12 @@ export default function SignUp() {
   const [inputEmail, inputEmailHandler, alertEmail, checkEmailRegx] =
     useLoginInput('', '', '이메일 형식으로 입력해주세요.', '', emailRegex);
 
-  const pwRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{5,}$/;
+  const pwRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
     '',
     '',
-    '최소 5자리 이상 입력',
+    '최소 8자리 이상 입력',
     '사용 가능한 비밀번호 입니다.',
     pwRegex
   );
@@ -60,13 +62,52 @@ export default function SignUp() {
       inputPw
     );
 
+  const signUpHandler = async (e) => {
+    e.preventDefault();
+
+    if (inputId === '') {
+      alert('ID를 입력해주세요.');
+    } else if (inputPw === '') {
+      alert('비밀번호를 입력해주세요.');
+    } else if (inputCheckPw === '') {
+      alert('비밀번호 확인을 입력해주세요.');
+    } else if (inputNickName === '') {
+      alert('닉네임을 입력해주세요.');
+    }
+
+    if (
+      checkIdRegex &&
+      checkPwRegex &&
+      doubleCheckPwRegex &&
+      checkNickNameRegex &&
+      checkEmailRegx
+    ) {
+      const userInfo = {
+        username: inputId,
+        password: inputPw,
+        email: inputEmail,
+        nickname: inputNickName,
+      };
+      signup.mutate(userInfo);
+    }
+  };
+
+  const signup = useMutation(postRegister, {
+    onSuccess: () => {
+      navigate('/login');
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+
   return (
     <>
       <SignUpTitleLayout>회원가입</SignUpTitleLayout>
       <SignUpNeedsBox>
         <RedPoint>*</RedPoint> 필수입력사항
       </SignUpNeedsBox>
-      <SingUpLayout>
+      <SingUpForm onSubmit={signUpHandler}>
         <InputLayout>
           <MiniBox>
             아이디<RedPoint>*</RedPoint>
@@ -168,11 +209,22 @@ export default function SignUp() {
           <SignUpSideBox />
         </InputLayout>
         <SignUpButtonLayout>
-          <Button onSubmit={moveToLogin} addReview>
+          <Button
+            addReview
+            disabled={
+              !(
+                checkIdRegex &&
+                checkPwRegex &&
+                doubleCheckPwRegex &&
+                checkNickNameRegex &&
+                checkEmailRegx
+              )
+            }
+          >
             가입하기
           </Button>
         </SignUpButtonLayout>
-      </SingUpLayout>
+      </SingUpForm>
     </>
   );
 }
@@ -204,7 +256,7 @@ const SignUpNeedsBox = styled.div`
   margin: auto;
 `;
 
-const SingUpLayout = styled.form`
+const SingUpForm = styled.form`
   width: 640px;
   min-height: 340px;
   margin: auto;
