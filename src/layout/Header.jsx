@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { BsHeart, BsClipboardPlus } from 'react-icons/bs';
 import logo from '../styles/img/logo.svg';
@@ -15,10 +15,12 @@ export default function Header() {
   const navigate = useNavigate();
   const moveToAddReview = () => navigate('/add-review');
   const moveToHome = () => navigate('/');
-
-  //스토어에서 로그인이 되어있는지 체크
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
+
+  //로그인이 되어있는지 체크하기위해 스토어에서 가져오기
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  //로그인한 유저의 정보를 뿌려주기 위해 가져오기
+  const saveUserInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   //로그아웃 핸들러
   function handleLogout(e) {
@@ -34,20 +36,27 @@ export default function Header() {
       {/* 로고 & 검색창 */}
       <HeaderStyles>
         <HeaderWrapper>
-          {isLoggedIn ? (
-            <HeaderLoginWrapper>
+          <HeaderLoginWrapper>
+            {/* 로컬스토리지의 토큰에 따라 회원 정보 띄움*/}
+            {saveUserInfo && (
+              <>
+                <Login welcome>{saveUserInfo.nickname}님 환영합니다!</Login>
+                <LoginLine />
+              </>
+            )}
+            {/* 로컬스토리지의 토큰에 따라 버튼 숨김 */}
+            {isLoggedIn ? (
               <Login onClick={handleLogout}>로그아웃</Login>
-            </HeaderLoginWrapper>
-          ) : (
-            <HeaderLoginWrapper>
-              <Login to={'/sign-up'} color={'#5F0080'}>
-                회원가입
-              </Login>
-              <div />
-              <Login to={'/login'}>로그인</Login>
-            </HeaderLoginWrapper>
-          )}
-
+            ) : (
+              <>
+                <Login to={'/sign-up'} color={'#5F0080'}>
+                  회원가입
+                </Login>
+                <LoginLine />
+                <Login to={'/login'}>로그인</Login>
+              </>
+            )}
+          </HeaderLoginWrapper>
           <HeaderLogoContainer>
             <Link to="/">
               <LogoImg src={logo} alt="리뷰컬리" />
@@ -117,17 +126,24 @@ const HeaderLoginWrapper = styled.div`
   display: flex;
   align-items: center;
   font-size: 12px;
-  div {
-    width: 1px;
-    height: 13px;
-    margin: 0px 12px;
-    background-color: #d9d9d9;
-  }
+`;
+
+const LoginLine = styled.div`
+  width: 1px;
+  height: 13px;
+  margin: 0px 12px;
+  background-color: #d9d9d9;
 `;
 
 const Login = styled(Link)`
   display: block;
   color: ${(props) => props.color};
+
+  ${(props) =>
+    props.welcome &&
+    css`
+      color: ${(props) => props.theme.CL.brandColor};
+    `}
 `;
 
 const HeaderWrapper = styled.div`

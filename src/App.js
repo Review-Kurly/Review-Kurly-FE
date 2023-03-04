@@ -13,7 +13,6 @@ import {
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store from './redux/config/configStore';
-
 const queryClient = new QueryClient();
 
 function App() {
@@ -28,8 +27,7 @@ function App() {
   };
 
   //로컬스토리지에 로그인한 유저 정보 get
-  const userInfo = localStorage.getItem('userInfo');
-  const saveUserInfo = JSON.parse(userInfo);
+  const saveUserInfo = JSON.parse(localStorage.getItem('userInfo'));
   console.log(saveUserInfo);
 
   return (
