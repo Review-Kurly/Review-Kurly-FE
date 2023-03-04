@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Input } from '../../components/Input';
+import { Input, LoginAlertSpan } from '../../components/Input';
 import Button from '../../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function LogIn() {
+  const navigate = useNavigate();
+  const moveToSignup = () => navigate('/sign-up');
   return (
     <>
       <LogInTitle>로그인</LogInTitle>
@@ -16,7 +19,9 @@ export default function LogIn() {
         </LogInInputLayout>
         <LogInInputLayout />
         <Button login>로그인</Button>
-        <Button signUp>회원가입</Button>
+        <Button onClick={moveToSignup} signUp>
+          회원가입
+        </Button>
       </LogInContainer>
     </>
   );

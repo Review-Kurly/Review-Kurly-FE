@@ -20,11 +20,11 @@ export default function Header() {
       <HeaderStyles>
         <HeaderWrapper>
           <HeaderLoginWrapper>
-            <Login to={'/'} color={'#5F0080'}>
+            <Login to={'/sign-up'} color={'#5F0080'}>
               회원가입
             </Login>
             <div />
-            <Login>로그인</Login>
+            <Login to={'/login'}>로그인</Login>
           </HeaderLoginWrapper>
           <HeaderLogoContainer>
             <Link to="/">
