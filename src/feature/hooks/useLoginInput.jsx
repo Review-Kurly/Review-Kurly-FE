@@ -18,9 +18,9 @@ const useLoginInput = (value, initial, reject, success, Reg, samePw) => {
         setAlert(success);
         setCheckReg(true);
       }
-      if (e.target.value === '') {
-        setAlert('');
-      }
+      // if (e.target.value === '') {
+      //   setAlert('');
+      // }
     },
     [Reg, reject, success]
   );
@@ -37,9 +37,9 @@ const useLoginInput = (value, initial, reject, success, Reg, samePw) => {
       setAlert(reject);
       setCheckReg(false);
     }
-    if (e.target.value === '') {
-      setAlert('');
-    }
+    // if (e.target.value === '') {
+    //   setAlert('');
+    // }
   };
 
   return [input, setInputHandler, alert, checkReg, checkSamePw];

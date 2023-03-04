@@ -60,7 +60,10 @@ const ButtonWrapper = styled.button`
       height: 3.5rem;
       text-align: center;
       color: white;
-      background-color: ${(props) => props.theme.CL.brandColor};
+      background: ${(props) =>
+        props.disabled
+          ? '#1d1d1d4e'
+          : `${(props) => props.theme.CL.brandColor}`};
     `}
 
 
