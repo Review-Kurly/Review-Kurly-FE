@@ -62,16 +62,15 @@ export function InputLayout(props) {
 
 InputLayout.defaultProps = {
   width: '640px',
-  height: '68px',
-  padding: '10px 20px',
+  minHeight: '68px',
 };
 
 const LayoutWrapper = styled.div`
   width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  padding: 10px 20px;
+  min-height: ${(props) => props.minHeight};
+  margin: 10px 20px;
   ${(props) => props.theme.FlexRow};
-
+  align-items: flex-start;
   ${(props) =>
     props.inputLayout &&
     css`
@@ -103,4 +102,13 @@ const MiniBoxWrapper = styled.div`
       align-items: 'center';
       height: 180px;
     `}
+`;
+
+export const LoginAlertSpan = styled.p`
+  display: flex;
+  width: 330px;
+  text-align: start;
+  font-size: 0.8rem;
+  padding: 0 0.2rem;
+  color: ${(props) => (props.isCurrent ? '#58793e' : 'tomato')};
 `;

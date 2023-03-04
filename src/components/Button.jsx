@@ -84,7 +84,8 @@ ${(props) =>
     css`
       font-size: 14px;
       display: block;
-      padding: 0px 10px;
+      padding: 0;
+      margin: 0;
       text-align: center;
       overflow: hidden;
       width: 122px;
@@ -130,7 +131,7 @@ ${(props) =>
     `}
 
 
-      
+
 
   & {
     cursor: pointer;
