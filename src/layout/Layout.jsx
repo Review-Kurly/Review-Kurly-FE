@@ -4,11 +4,12 @@ import Header from './Header';
 
 const MainWrapper = styled.div`
   width: calc(100%);
-  height: calc(100vh - 250px);
+  height: 100%;
 `;
 
 const BodyWrapper = styled.div`
   height: 100%;
+  padding: 0 0 5rem;
 `;
 
 function Layout({ children }) {
