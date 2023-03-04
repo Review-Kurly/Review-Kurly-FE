@@ -1,7 +1,7 @@
 import React from 'react';
 
-import HomeSlideImg from '../feature/components/home/HomeSlideImg';
-import ReviewCards from '../feature/components/home/ReviewCards';
+import HomeSlideImg from './components/HomeSlideImg';
+import ReviewCards from './components/ReviewCards';
 
 export default function Home() {
   return (

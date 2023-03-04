@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CardBoxTitle, HomeCardBoxWrapper } from '../home/ReviewCards';
+import {
+  CardBoxTitle,
+  HomeCardBoxWrapper,
+} from '../../pages/home/components/ReviewCards';
 import DetailCards from './DetailCards';
 
 export default function DetailContainer(props) {
