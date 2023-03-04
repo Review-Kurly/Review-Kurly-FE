@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Input, InputLayout, MiniBox } from '../../../common/Input';
+import { Input, InputLayout, MiniBox } from '../../components/Input';
 
-import Button from '../../../common/Button';
+import Button from '../../components/Button';
 
 export default function AddReview() {
   return (

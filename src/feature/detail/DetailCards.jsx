@@ -9,7 +9,7 @@ import {
   InfoTitle,
   ItemsImgContainer,
   ItemsInfoContainer,
-} from '../home/ReviewCards';
+} from '../../pages/home/components/ReviewCards';
 
 export default function DetailCards(props) {
   return (

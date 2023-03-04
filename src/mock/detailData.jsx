@@ -8,7 +8,6 @@ export const detailData = [
     place: '쿠팡',
     purchaseUrl: 'https://www.sparta.com',
     userReview: '정말 맛있었어요!',
-    likeCount: 20,
   },
   {
     id: 2,
@@ -19,7 +18,6 @@ export const detailData = [
     place: '쿠팡',
     purchaseUrl: 'https://www.sparta.com',
     userReview: '정말 맛있었어요!',
-    likeCount: 20,
   },
   {
     id: 3,
@@ -30,7 +28,6 @@ export const detailData = [
     place: '쿠팡',
     purchaseUrl: 'https://www.sparta.com',
     userReview: '정말 맛있었어요!',
-    likeCount: 20,
   },
   {
     id: 4,
@@ -41,6 +38,5 @@ export const detailData = [
     place: '쿠팡',
     purchaseUrl: 'https://www.sparta.com',
     userReview: '정말 맛있었어요!',
-    likeCount: 20,
   },
 ];

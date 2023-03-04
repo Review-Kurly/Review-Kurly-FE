@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { InputLayout, Input, MiniBox } from '../../common/Input';
-import Button from '../../common/Button';
+import { InputLayout, Input, MiniBox } from '../../components/Input';
+import Button from '../../components/Button';
 
 export default function SignUp() {
   return (

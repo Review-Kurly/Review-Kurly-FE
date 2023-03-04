@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Layout from '../layout/components/Layout';
-import Home from '../pages/HomePg';
-import AddReview from '../pages/AddReviewPg';
-import NewReview from '../pages/NewReviewPg';
-import BestReview from '../pages/BestReviewPg';
-import Mypage from '../pages/Mypage';
-import SignUp from '../feature/signUp/SignUp';
-import LogIn from '../feature/logIn/LogIn';
+import Layout from '../layout/Layout';
+import Home from '../pages/home/HomePg';
+import AddReview from '../pages/addReview/AddReview';
+import NewReview from '../pages/newReview/NewReviewPg';
+import BestReview from '../pages/bestReview/BestReviewPg';
+import Mypage from '../pages/mypage/Mypage';
+import SignUp from '../pages/logIn/SignUp';
+import LogIn from '../pages/logIn/LogIn';
+import Detail from '../pages/detailReview/DetailPg';
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/detail/:id" element={<Detail />} />
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/new-review" element={<NewReview />} />
           <Route path="/best-review" element={<BestReview />} />

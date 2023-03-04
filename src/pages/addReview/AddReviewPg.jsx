@@ -1,5 +1,5 @@
 import React from 'react';
-import AddReview from '../feature/components/detail/AddReview';
+import AddReview from './AddReview';
 
 function AddReviewPg() {
   return <AddReview />;

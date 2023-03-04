@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Button from '../../common/Button';
 import { FaSearch } from 'react-icons/fa';
 import { BsHeart, BsClipboardPlus } from 'react-icons/bs';
-import logo from '../../styles/img/logo.svg';
-import useInputOnChange from '../../feature/hooks/useInputOnChange';
+import logo from '../styles/img/logo.svg';
+import useInputOnChange from '../feature/hooks/useInputOnChange';
+import Button from '../components/Button';
 
 export default function Header() {
   const [{ search }, titleInputHanlder] = useInputOnChange({ search: '' });
