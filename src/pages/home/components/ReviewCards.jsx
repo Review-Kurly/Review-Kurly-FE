@@ -15,7 +15,7 @@ export default function ReviewCards() {
           <CardBoxItemWrapper>
             <StyledSlider {...settings}>
               {homeData.map((item) => (
-                <CardBoxItems>
+                <CardBoxItems key={item.id}>
                   <ItemsImgContainer>
                     <img src={item.imageUrl} alt="" />
                   </ItemsImgContainer>
