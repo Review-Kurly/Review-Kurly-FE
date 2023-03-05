@@ -1,27 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Input } from '../../components/Input';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import useInputOnChange from '../../feature/hooks/useInputOnChange';
-import { postLogin } from '../../modules/api/api';
-import { useMutation, useQuery } from 'react-query';
+import { kurlyLogin } from '../../modules/api/api';
+import { useMutation } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/authSlice';
+import isLogin from '../../modules/util/isLogin';
+import Spiner from '../../components/Spiner';
 
 export default function LogIn() {
   const navigate = useNavigate();
   const moveToSignup = () => navigate('/sign-up');
+  const moveToHome = () => navigate('/');
+  const dispatch = useDispatch();
 
-  // const {isLoading, isError, data}=useQuery("login",postLogin)
-  const login = useMutation(postLogin, {
-    onSuccess: () => {
-      navigate('/');
-    },
-    onError: (e) => {
-      console.log(e);
-    },
+  //토큰이 존재한다면 홈으로 리다이렉트
+  useEffect(() => {
+    if (isLogin() === true) navigate('/');
   });
 
-  const [formValues, setFormValues, resetFormValues] = useInputOnChange({
+  const login = useMutation(kurlyLogin, {
+    onSuccess: (data) => {
+      dispatch(loginSuccess());
+      moveToHome();
+    },
+    onError: (e) => {
+      return;
+    },
+  });
+  //중복 값에 따른 오류 메시지
+  const errorMessage = login.error?.response.data.code;
+
+  const [formValues, setFormValues] = useInputOnChange({
     username: '',
     password: '',
   });
@@ -32,10 +45,11 @@ export default function LogIn() {
       login.mutate(formValues);
     }
   };
-  console.log(formValues);
 
   return (
     <>
+      {login.isLoading && <Spiner />}
+
       <LogInTitle>로그인</LogInTitle>
       <LogInContainer onSubmit={handleSubmit}>
         <LogInInputLayout>
@@ -47,7 +61,7 @@ export default function LogIn() {
             onChange={setFormValues}
             required
             placeholder="아이디를 입력해주세요"
-          />{' '}
+          />
         </LogInInputLayout>
         <LogInInputLayout>
           <Input
@@ -57,9 +71,13 @@ export default function LogIn() {
             onChange={setFormValues}
             required
             placeholder="비밀번호를 입력해주세요"
-          />{' '}
+          />
         </LogInInputLayout>
-        {login.error?.response.data.data.errorMessage}
+        {errorMessage === 401
+          ? '패스워드가 일치하지 않습니다.'
+          : errorMessage === 400
+          ? '회원 정보가 없습니다. 회원가입을 진행해주세요.'
+          : ''}
         <LogInInputLayout />
         <Button login>로그인</Button>
         <Button type="button" onClick={moveToSignup} signUp>

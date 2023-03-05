@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputLayout,
@@ -11,9 +11,16 @@ import useLoginInput from '../../feature/hooks/useLoginInput';
 import { useMutation } from 'react-query';
 import { postRegister } from '../../modules/api/api';
 import { useNavigate } from 'react-router-dom';
+import isLogin from '../../modules/util/isLogin';
+import Spiner from '../../components/Spiner';
 
 export default function SignUp() {
   const navigate = useNavigate();
+
+  //토큰이 존재한다면 홈으로 리다이렉트
+  useEffect(() => {
+    if (isLogin() === true) navigate('/');
+  });
 
   const idRegex = /^(?=.*?[0-9])(?=.*?[a-z]).{6,16}$/;
   const [inputId, inputIdHandler, alertId, checkIdRegex] = useLoginInput(
@@ -47,7 +54,7 @@ export default function SignUp() {
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
     '',
     '',
-    '최소 8자리 이상 입력',
+    '영문/숫자/특수문자(공백 제외)만 허용하며, 2개 이상 조합',
     '사용 가능한 비밀번호 입니다.',
     pwRegex
   );
@@ -64,17 +71,6 @@ export default function SignUp() {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-
-    if (inputId === '') {
-      alert('ID를 입력해주세요.');
-    } else if (inputPw === '') {
-      alert('비밀번호를 입력해주세요.');
-    } else if (inputCheckPw === '') {
-      alert('비밀번호 확인을 입력해주세요.');
-    } else if (inputNickName === '') {
-      alert('닉네임을 입력해주세요.');
-    }
-
     if (
       checkIdRegex &&
       checkPwRegex &&
@@ -101,8 +97,12 @@ export default function SignUp() {
     },
   });
 
+  //중복 값에 따른 오류 메시지
+  const errorMessage = signup.error?.response.status;
+  console.log(errorMessage);
   return (
     <>
+      {signup.isLoading && <Spiner />}
       <SignUpTitleLayout>회원가입</SignUpTitleLayout>
       <SignUpNeedsBox>
         <RedPoint>*</RedPoint> 필수입력사항
@@ -118,9 +118,16 @@ export default function SignUp() {
               onChange={inputIdHandler}
               singupInput
               type="text"
+              required
               placeholder="아이디를 입력해주세요"
             />
-            <LoginAlertSpan isCurrent={checkIdRegex}>{alertId}</LoginAlertSpan>
+            {errorMessage === 400 ? (
+              <LoginAlertSpan>중복된 아이디 입니다</LoginAlertSpan>
+            ) : (
+              <LoginAlertSpan isCurrent={checkIdRegex}>
+                {alertId}
+              </LoginAlertSpan>
+            )}
           </RegexCheckContainer>
           <SignUpSideBox>
             <Button overlap type="button">
@@ -139,6 +146,7 @@ export default function SignUp() {
               onChange={inputNickNameHandler}
               singupInput
               type="text"
+              required
               placeholder="닉네임을 입력해주세요"
             />
             <LoginAlertSpan isCurrent={checkNickNameRegex}>
@@ -162,6 +170,7 @@ export default function SignUp() {
               onChange={inputEmailHandler}
               singupInput
               type="text"
+              required
               placeholder="이메일을 입력해주세요"
             />
             <LoginAlertSpan isCurrent={checkEmailRegx}>
@@ -184,6 +193,7 @@ export default function SignUp() {
               onChange={inputPwHandler}
               singupInput
               type="password"
+              required
               placeholder="비밀번호를 입력해주세요"
             />
             <LoginAlertSpan isCurrent={checkPwRegex}>{alertPw}</LoginAlertSpan>
@@ -200,6 +210,7 @@ export default function SignUp() {
               onChange={checkSame}
               singupInput
               type="password"
+              required
               placeholder="비밀번호를 한번 더 입력해주세요"
             />
             <LoginAlertSpan isCurrent={doubleCheckPwRegex}>

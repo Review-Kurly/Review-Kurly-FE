@@ -61,11 +61,8 @@ const ButtonWrapper = styled.button`
       text-align: center;
       color: white;
       background: ${(props) =>
-        props.disabled
-          ? '#1d1d1d4e'
-          : `${(props) => props.theme.CL.brandColor}`};
+        props.disabled ? '#1d1d1d4e' : props.theme.CL.brandColor};
     `}
-
 
 ${(props) =>
     props.cancel &&

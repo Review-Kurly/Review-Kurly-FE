@@ -13,7 +13,7 @@ export default function DetailContainer(props) {
         <CardBoxTitle>{props.title}</CardBoxTitle>
         <CardBoxContatainer>
           {props.data.map((item) => (
-            <DetailCards item={item} />
+            <DetailCards key={item.id} item={item} />
           ))}
         </CardBoxContatainer>
       </HomeCardBoxWrapper>
