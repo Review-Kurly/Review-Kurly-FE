@@ -40,7 +40,9 @@ export default function Header() {
             {/* 로컬스토리지의 토큰에 따라 회원 정보 띄움*/}
             {saveUserInfo && (
               <>
-                <Login welcome>{saveUserInfo.nickname}님 환영합니다!</Login>
+                <Login welcome="true">
+                  {saveUserInfo.nickname}님 환영합니다!
+                </Login>
                 <LoginLine />
               </>
             )}
@@ -140,7 +142,7 @@ const Login = styled(Link)`
   color: ${(props) => props.color};
 
   ${(props) =>
-    props.welcome &&
+    props.welcome === 'true' &&
     css`
       color: ${(props) => props.theme.CL.brandColor};
     `}

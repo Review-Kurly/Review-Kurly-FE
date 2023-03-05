@@ -4,11 +4,12 @@ import { Input } from '../../components/Input';
 import Button from '../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import useInputOnChange from '../../feature/hooks/useInputOnChange';
-import { postLogin } from '../../modules/api/api';
+import { kurlyLogin } from '../../modules/api/api';
 import { useMutation } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../redux/authSlice';
 import isLogin from '../../modules/util/isLogin';
+import Spiner from '../../components/Spiner';
 
 export default function LogIn() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function LogIn() {
     if (isLogin() === true) navigate('/');
   });
 
-  const login = useMutation(postLogin, {
+  const login = useMutation(kurlyLogin, {
     onSuccess: (data) => {
       dispatch(loginSuccess());
       moveToHome();
@@ -47,6 +48,8 @@ export default function LogIn() {
 
   return (
     <>
+      {login.isLoading && <Spiner />}
+
       <LogInTitle>로그인</LogInTitle>
       <LogInContainer onSubmit={handleSubmit}>
         <LogInInputLayout>
