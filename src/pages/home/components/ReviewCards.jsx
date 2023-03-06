@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import Slider from 'react-slick';
@@ -8,7 +8,37 @@ import { getReviewMainpg } from '../../../modules/api/api';
 import { useQuery } from 'react-query';
 import Spiner from '../../../components/Spiner';
 
-export default function ReviewCards() {
+export default function ReviewCards({ infinite }) {
+  const [showNextArrow, setShowNextArrow] = useState(true);
+  const [showPrevArrow, setShowPrevArrow] = useState(false);
+
+  const settings = {
+    dots: false,
+    infinite: infinite,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    autoplay: false,
+    autoplaySpeed: 3000,
+    prevArrow: showPrevArrow ? <Pre></Pre> : null,
+    nextArrow: showNextArrow ? <NextTo></NextTo> : null,
+    afterChange: (currentSlide) => {
+      const totalSlides = randomReveiw.length;
+
+      console.log('currentSlide --->', currentSlide);
+      console.log('totalSlides --->', totalSlides);
+      if (currentSlide === 0) {
+        setShowPrevArrow(false);
+      } else {
+        setShowPrevArrow(true);
+      }
+      if (currentSlide === totalSlides - 4) {
+        setShowNextArrow(false);
+      } else {
+        setShowNextArrow(true);
+      }
+    },
+  };
   const { isLoading, isError, data } = useQuery(
     'getMainpgReview',
     getReviewMainpg
@@ -192,15 +222,3 @@ const Pre = styled(SlickBtn.withComponent('div'))`
   left: 0px;
   transform: translate(-50%, -50%);
 `;
-
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 4,
-  autoplay: false, // 자동 슬라이드 기능 활성화
-  autoplaySpeed: 3000, // 자동 슬라이드 시간 설정 (3초)
-  nextArrow: <NextTo></NextTo>,
-  prevArrow: <Pre></Pre>,
-};

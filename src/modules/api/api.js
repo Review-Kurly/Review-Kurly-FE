@@ -9,16 +9,15 @@ export const postRegister = async (data) => {
 
 //  로그인
 export const kurlyLogin = async (data) => {
-  console.log('data', data);
-
+  // console.log('data', data); //로그인 할때 정보 콘솔 확인
   const response = await api.post('api/users/login', data);
   console.log(response.data.data);
-  const { token } = response.data;
   const Token = response.headers.authorization;
   const userInfo = response.data.data;
 
-  console.log('token --->', token);
-  //세션 스토리지에 유저 정보 저장
+  //로컬 스토리지에 유저 정보 저장
+  api.defaults.headers.common['Authorization'] = Token;
+
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
   console.log('localStroage---->', localStorage.getItem('userInfo'));
   // 토큰 만료 시간
