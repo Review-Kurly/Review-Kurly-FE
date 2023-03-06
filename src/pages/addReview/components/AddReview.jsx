@@ -57,7 +57,7 @@ export default function AddReview() {
       const compressedFile = await imageCompression(imageFile, options); // 이미지 압축 수행
 
       const formImg = new FormData(); // FormData 객체 생성
-      formImg.append('imageUrl', compressedFile); // 압축된 이미지 파일을 FormData 객체에 추가
+      formImg.append('imageFile', compressedFile); // 압축된 이미지 파일을 FormData 객체에 추가
       setFormImage(formImg); // state 값을 변경하여 FormData 객체를 업데이트
 
       console.log('After Compression: ', compressedFile.size); //압축 후
