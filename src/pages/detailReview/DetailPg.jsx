@@ -4,15 +4,19 @@ import Comment from './components/Comment';
 import Modal from '../../components/Modal';
 import Button from '../../components/Button';
 import { useModalState } from '../../feature/hooks/useModalState';
+import DetailInfoCard from './components/DetailInfoCard';
+import useScrollToTop from '../../feature/hooks/useScrollToTop';
 
 export default function DetailPg() {
   const [modalOne, toggleModalOne] = useModalState(false);
   const [modalTwo, toggleModalTwo] = useModalState(false);
   const [modalThree, toggleModalThree] = useModalState(false);
-
+  // scroll to top 훅
+  const topRef = useScrollToTop();
   return (
     <>
-      <DetailReviewWrapper>
+      <DetailReviewWrapper ref={topRef}>
+        <DetailInfoCard />
         <Comment />
         <div>
           <Button onClick={toggleModalOne}>권구민</Button>

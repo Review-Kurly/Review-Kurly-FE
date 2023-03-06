@@ -1,21 +1,54 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+
+import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import {
   InputLayout,
   Input,
   MiniBox,
   LoginAlertSpan,
 } from '../../components/Input';
+import { postRegister } from '../../modules/api/api';
+import { useDuplicateCheck } from '../../feature/hooks/useCheckDuplicate';
+
 import Button from '../../components/Button';
 import useLoginInput from '../../feature/hooks/useLoginInput';
-import { useMutation } from 'react-query';
-import { postRegister } from '../../modules/api/api';
-import { useNavigate } from 'react-router-dom';
 import isLogin from '../../modules/util/isLogin';
 import Spiner from '../../components/Spiner';
 
 export default function SignUp() {
   const navigate = useNavigate();
+
+  const { checkDuplicateId, checkDuplicateNickname, checkDuplicateEmail } =
+    useDuplicateCheck();
+
+  // 아이디 중복 체크
+  const duplicateIdMsg = checkDuplicateId.data?.data.unique;
+  const checkUserId = (e) => {
+    e.preventDefault();
+    if (inputId) {
+      checkDuplicateId.mutate(inputId);
+    }
+  };
+
+  // 닉네임 중복 체크
+  const duplicateNicknameMsg = checkDuplicateNickname.data?.data.unique;
+  const checkUserNickname = (e) => {
+    e.preventDefault();
+    if (inputNickName) {
+      checkDuplicateNickname.mutate(inputNickName);
+    }
+  };
+
+  // 이메일 중복 체크
+  const duplicateEmailMsg = checkDuplicateEmail.data?.data.unique;
+  const checkUserEmail = (e) => {
+    e.preventDefault();
+    if (inputEmail) {
+      checkDuplicateEmail.mutate(inputEmail);
+    }
+  };
 
   //토큰이 존재한다면 홈으로 리다이렉트
   useEffect(() => {
@@ -97,11 +130,11 @@ export default function SignUp() {
     },
   });
 
-  //중복 값에 따른 오류 메시지
-  const errorMessage = signup.error?.response.status;
-  console.log(errorMessage);
   return (
     <>
+      {/* {isDuplicateIdChecking ||
+        isDuplicateNicknameChecking ||
+        (isDuplicateEmailChecking && <Spiner />)} */}
       {signup.isLoading && <Spiner />}
       <SignUpTitleLayout>회원가입</SignUpTitleLayout>
       <SignUpNeedsBox>
@@ -121,8 +154,10 @@ export default function SignUp() {
               required
               placeholder="아이디를 입력해주세요"
             />
-            {errorMessage === 400 ? (
+            {duplicateIdMsg === false ? (
               <LoginAlertSpan>중복된 아이디 입니다</LoginAlertSpan>
+            ) : duplicateIdMsg === true ? (
+              <LoginAlertSpan>사용할 수 있는 아이디 입니다.</LoginAlertSpan>
             ) : (
               <LoginAlertSpan isCurrent={checkIdRegex}>
                 {alertId}
@@ -130,7 +165,7 @@ export default function SignUp() {
             )}
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button">
+            <Button overlap type="button" onClick={checkUserId}>
               중복확인
             </Button>
           </SignUpSideBox>
@@ -149,12 +184,18 @@ export default function SignUp() {
               required
               placeholder="닉네임을 입력해주세요"
             />
-            <LoginAlertSpan isCurrent={checkNickNameRegex}>
-              {alertNickName}
-            </LoginAlertSpan>
+            {duplicateNicknameMsg === false ? (
+              <LoginAlertSpan>중복된 닉네임 입니다</LoginAlertSpan>
+            ) : duplicateNicknameMsg === true ? (
+              <LoginAlertSpan>사용할 수 있는 닉네임 입니다.</LoginAlertSpan>
+            ) : (
+              <LoginAlertSpan isCurrent={checkNickNameRegex}>
+                {alertNickName}
+              </LoginAlertSpan>
+            )}
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button">
+            <Button overlap type="button" onClick={checkUserNickname}>
               중복확인
             </Button>
           </SignUpSideBox>
@@ -173,12 +214,18 @@ export default function SignUp() {
               required
               placeholder="이메일을 입력해주세요"
             />
-            <LoginAlertSpan isCurrent={checkEmailRegx}>
-              {alertEmail}
-            </LoginAlertSpan>
+            {duplicateEmailMsg === false ? (
+              <LoginAlertSpan>중복된 이메일 입니다</LoginAlertSpan>
+            ) : duplicateEmailMsg === true ? (
+              <LoginAlertSpan>사용할 수 있는 이메일 입니다.</LoginAlertSpan>
+            ) : (
+              <LoginAlertSpan isCurrent={checkEmailRegx}>
+                {alertEmail}
+              </LoginAlertSpan>
+            )}
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button">
+            <Button overlap type="button" onClick={checkUserEmail}>
               중복확인
             </Button>
           </SignUpSideBox>

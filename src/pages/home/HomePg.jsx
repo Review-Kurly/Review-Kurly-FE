@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <HomeSlideImg />
       {/* 카드 */}
-      <ReviewCards />
+      <ReviewCards infinite={false} />
     </>
   );
 }
