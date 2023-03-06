@@ -4,9 +4,25 @@ import { FaRegCommentAlt } from 'react-icons/fa';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { homeData } from '../../../mock/homeData';
+import { getReviewMainpg } from '../../../modules/api/api';
+import { useQuery } from 'react-query';
+import Spiner from '../../../components/Spiner';
 
 export default function ReviewCards() {
+  const { isLoading, isError, data } = useQuery(
+    'getMainpgReview',
+    getReviewMainpg
+  );
+
+  const randomReveiw = data?.data;
+
+  if (isLoading) {
+    return <Spiner />;
+  }
+  if (isError) {
+    return <div>에러 발생</div>;
+  }
+
   return (
     <>
       <HomeCardBoxWrapper>
@@ -14,7 +30,7 @@ export default function ReviewCards() {
         <CardBoxContatainer>
           <CardBoxItemWrapper>
             <StyledSlider {...settings}>
-              {homeData.map((item) => (
+              {randomReveiw?.map((item) => (
                 <CardBoxItems key={item.id}>
                   <ItemsImgContainer>
                     <img src={item.imageUrl} alt="" />

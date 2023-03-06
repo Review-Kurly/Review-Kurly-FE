@@ -39,3 +39,10 @@ export const addReview = async ({ token, data }) => {
   });
   return response.data;
 };
+
+//메인 페이지 조회
+
+export const getReviewMainpg = async () => {
+  const response = await api.get('/api/reviews/');
+  return response.data;
+};
