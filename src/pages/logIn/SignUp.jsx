@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -11,15 +10,27 @@ import {
 } from '../../components/Input';
 import { postRegister } from '../../modules/api/api';
 import { useDuplicateCheck } from '../../feature/hooks/useCheckDuplicate';
-
+import { useModalState } from '../../feature/hooks/useModalState';
 import Button from '../../components/Button';
 import useLoginInput from '../../feature/hooks/useLoginInput';
 import isLogin from '../../modules/util/isLogin';
 import Spiner from '../../components/Spiner';
+import { CustomModal } from '../../components/Modal';
 
 export default function SignUp() {
   const navigate = useNavigate();
 
+  // 중복 체크 모달
+  const [modalId, toggleModalId] = useModalState(false);
+  const [modalNick, toggleModalNick] = useModalState(false);
+  const [modalEmail, toggleModalEmail] = useModalState(false);
+
+  // 중복체크 확인 여부를 위한 state
+  const [isIdValid, setIsIdValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(false);
+
+  // 중복 체크 훅
   const { checkDuplicateId, checkDuplicateNickname, checkDuplicateEmail } =
     useDuplicateCheck();
 
@@ -29,6 +40,8 @@ export default function SignUp() {
     e.preventDefault();
     if (inputId) {
       checkDuplicateId.mutate(inputId);
+      toggleModalId(); // 모달창
+      setIsIdValid(true); // 아이디 중복 확인
     }
   };
 
@@ -38,6 +51,8 @@ export default function SignUp() {
     e.preventDefault();
     if (inputNickName) {
       checkDuplicateNickname.mutate(inputNickName);
+      toggleModalNick(); // 모달창
+      setIsNicknameValid(true); // 닉네임 중복 확인
     }
   };
 
@@ -47,6 +62,8 @@ export default function SignUp() {
     e.preventDefault();
     if (inputEmail) {
       checkDuplicateEmail.mutate(inputEmail);
+      toggleModalEmail(); // 모달창
+      setIsEmailValid(true); // 이메일 중복 확인
     }
   };
 
@@ -109,7 +126,10 @@ export default function SignUp() {
       checkPwRegex &&
       doubleCheckPwRegex &&
       checkNickNameRegex &&
-      checkEmailRegx
+      checkEmailRegx &&
+      isIdValid &&
+      isNicknameValid &&
+      isEmailValid
     ) {
       const userInfo = {
         username: inputId,
@@ -132,9 +152,6 @@ export default function SignUp() {
 
   return (
     <>
-      {/* {isDuplicateIdChecking ||
-        isDuplicateNicknameChecking ||
-        (isDuplicateEmailChecking && <Spiner />)} */}
       {signup.isLoading && <Spiner />}
       <SignUpTitleLayout>회원가입</SignUpTitleLayout>
       <SignUpNeedsBox>
@@ -151,21 +168,31 @@ export default function SignUp() {
               onChange={inputIdHandler}
               singupInput
               type="text"
-              required
               placeholder="아이디를 입력해주세요"
             />
+
             {duplicateIdMsg === false ? (
               <LoginAlertSpan>중복된 아이디 입니다</LoginAlertSpan>
-            ) : duplicateIdMsg === true ? (
-              <LoginAlertSpan>사용할 수 있는 아이디 입니다.</LoginAlertSpan>
             ) : (
               <LoginAlertSpan isCurrent={checkIdRegex}>
                 {alertId}
               </LoginAlertSpan>
             )}
+
+            {/* 아이디 중복 모달 */}
+            <CustomModal isOpen={modalId} toggle={toggleModalId}>
+              {duplicateIdMsg === false
+                ? '중복된 아이디 입니다!'
+                : '사용할 수 있는 아이디 입니다.'}
+            </CustomModal>
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button" onClick={checkUserId}>
+            <Button
+              overlap
+              type="button"
+              onClick={checkUserId}
+              disabled={!checkIdRegex}
+            >
               중복확인
             </Button>
           </SignUpSideBox>
@@ -181,26 +208,33 @@ export default function SignUp() {
               onChange={inputNickNameHandler}
               singupInput
               type="text"
-              required
               placeholder="닉네임을 입력해주세요"
             />
             {duplicateNicknameMsg === false ? (
               <LoginAlertSpan>중복된 닉네임 입니다</LoginAlertSpan>
-            ) : duplicateNicknameMsg === true ? (
-              <LoginAlertSpan>사용할 수 있는 닉네임 입니다.</LoginAlertSpan>
             ) : (
               <LoginAlertSpan isCurrent={checkNickNameRegex}>
                 {alertNickName}
               </LoginAlertSpan>
             )}
+            {/* 닉네임 중복 모달 */}
+            <CustomModal isOpen={modalNick} toggle={toggleModalNick}>
+              {duplicateNicknameMsg === false
+                ? '중복된 닉네임 입니다!'
+                : '사용할 수 있는 닉네임 입니다.'}
+            </CustomModal>
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button" onClick={checkUserNickname}>
+            <Button
+              overlap
+              type="button"
+              onClick={checkUserNickname}
+              disabled={!checkNickNameRegex}
+            >
               중복확인
             </Button>
           </SignUpSideBox>
         </InputLayout>
-
         <InputLayout>
           <MiniBox>
             이메일<RedPoint>*</RedPoint>
@@ -211,21 +245,29 @@ export default function SignUp() {
               onChange={inputEmailHandler}
               singupInput
               type="text"
-              required
               placeholder="이메일을 입력해주세요"
             />
             {duplicateEmailMsg === false ? (
               <LoginAlertSpan>중복된 이메일 입니다</LoginAlertSpan>
-            ) : duplicateEmailMsg === true ? (
-              <LoginAlertSpan>사용할 수 있는 이메일 입니다.</LoginAlertSpan>
             ) : (
               <LoginAlertSpan isCurrent={checkEmailRegx}>
                 {alertEmail}
               </LoginAlertSpan>
             )}
+            {/* 이메일 중복 모달 */}
+            <CustomModal isOpen={modalEmail} toggle={toggleModalEmail}>
+              {duplicateEmailMsg === false
+                ? '중복된 이메일 입니다!'
+                : '사용할 수 있는 이메일 입니다.'}
+            </CustomModal>
           </RegexCheckContainer>
           <SignUpSideBox>
-            <Button overlap type="button" onClick={checkUserEmail}>
+            <Button
+              overlap
+              type="button"
+              onClick={checkUserEmail}
+              disabled={!checkEmailRegx}
+            >
               중복확인
             </Button>
           </SignUpSideBox>
@@ -240,7 +282,6 @@ export default function SignUp() {
               onChange={inputPwHandler}
               singupInput
               type="password"
-              required
               placeholder="비밀번호를 입력해주세요"
             />
             <LoginAlertSpan isCurrent={checkPwRegex}>{alertPw}</LoginAlertSpan>
@@ -257,7 +298,6 @@ export default function SignUp() {
               onChange={checkSame}
               singupInput
               type="password"
-              required
               placeholder="비밀번호를 한번 더 입력해주세요"
             />
             <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
@@ -273,10 +313,16 @@ export default function SignUp() {
               !(
                 checkIdRegex &&
                 checkPwRegex &&
+                checkEmailRegx &&
                 doubleCheckPwRegex &&
                 checkNickNameRegex &&
-                checkEmailRegx
-              )
+                isIdValid &&
+                isNicknameValid &&
+                isEmailValid
+              ) ||
+              !duplicateIdMsg ||
+              !duplicateNicknameMsg ||
+              !duplicateEmailMsg
             }
           >
             가입하기
@@ -286,7 +332,6 @@ export default function SignUp() {
     </>
   );
 }
-
 const RegexCheckContainer = styled.div`
   ${(props) => props.theme.FlexCol}
 `;

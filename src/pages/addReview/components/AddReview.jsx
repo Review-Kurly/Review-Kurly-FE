@@ -4,7 +4,7 @@ import { Input, InputLayout, MiniBox } from '../../../components/Input';
 import Button from '../../../components/Button';
 //npm i browser-image-compression
 import imageCompression from 'browser-image-compression';
-import { useMutation } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import useInputOnChange from '../../../feature/hooks/useInputOnChange';
 import Cookies from 'js-cookie';
 import { addReview } from '../../../modules/api/api';
@@ -24,6 +24,7 @@ export default function AddReview() {
     description: '',
   });
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const token = Cookies.get('accessJWTToken');
 
   // 이미지 파일 데이터를 포함하는 FormData 객체 생성
@@ -57,7 +58,7 @@ export default function AddReview() {
       const compressedFile = await imageCompression(imageFile, options); // 이미지 압축 수행
 
       const formImg = new FormData(); // FormData 객체 생성
-      formImg.append('imageUrl', compressedFile); // 압축된 이미지 파일을 FormData 객체에 추가
+      formImg.append('imageFile', compressedFile); // 압축된 이미지 파일을 FormData 객체에 추가
       setFormImage(formImg); // state 값을 변경하여 FormData 객체를 업데이트
 
       console.log('After Compression: ', compressedFile.size); //압축 후
@@ -78,6 +79,7 @@ export default function AddReview() {
   const postReviews = useMutation(addReview, {
     onSuccess: (data) => {
       console.log('addreview data --->', data);
+      queryClient.invalidateQueries('getMainpgReview');
     },
     onError: (e) => {
       console.log('addReview Error --->', e);
@@ -104,8 +106,7 @@ export default function AddReview() {
       console.log(value);
     }
     postReviews.mutate({ token, data: formData }); // 리뷰 데이터를 서버로 전송
-
-    navigate(-1);
+    navigate('/');
   };
 
   const deletePreviewImg = () => {

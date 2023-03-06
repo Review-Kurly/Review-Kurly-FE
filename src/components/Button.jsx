@@ -31,6 +31,16 @@ const ButtonWrapper = styled.button`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'pointer')};
 
   ${(props) =>
+    props.closeModal &&
+    css`
+      width: 100%;
+      height: 100%;
+      color: ${(props) => props.theme.CL.brandColor};
+      padding: 0px;
+      font-weight: 900;
+    `}
+
+  ${(props) =>
     props.addAndHeart &&
     css`
       margin-right: 10px;
@@ -64,7 +74,7 @@ const ButtonWrapper = styled.button`
         props.disabled ? '#1d1d1d4e' : props.theme.CL.brandColor};
     `}
 
-${(props) =>
+    ${(props) =>
     props.cancel &&
     css`
       padding: 0rem 0.625rem;
@@ -90,8 +100,10 @@ ${(props) =>
       overflow: hidden;
       width: 122px;
       height: 44px;
-      color: ${(props) => props.theme.CL.brandColor};
-      border: 1px solid ${(props) => props.theme.CL.brandColor};
+      color: ${(props) =>
+        props.disabled ? '#dddddd' : props.theme.CL.brandColor};
+      border: 1px solid
+        ${(props) => (props.disabled ? '#dddddd' : props.theme.CL.brandColor)};
       background-color: white;
       border-radius: 3px;
     `}
