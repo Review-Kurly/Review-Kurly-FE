@@ -31,7 +31,7 @@ export const kurlyLogin = async (data) => {
 
 export const addReview = async ({ token, data }) => {
   console.log('data--->', data);
-  const response = await api.post(`/api/reviews/details`, data, {
+  const response = await api.post(`/api/reviews-details/`, data, {
     headers: {
       Authorization: `${token}`,
       'Content-Type': 'multipart/form-data',
