@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
@@ -9,7 +9,6 @@ import Button from '../components/Button';
 import Cookies from 'js-cookie';
 import { logoutSuccess } from '../redux/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-
 export default function Header() {
   const [{ search }, titleInputHanlder] = useInputOnChange({ search: '' });
   const navigate = useNavigate();

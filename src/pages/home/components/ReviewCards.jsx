@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { getReviewMainpg } from '../../../modules/api/api';
 import { useQuery } from 'react-query';
 import Spiner from '../../../components/Spiner';
+import { Link } from 'react-router-dom';
 
 export default function ReviewCards({ infinite }) {
   const [showNextArrow, setShowNextArrow] = useState(true);
@@ -61,7 +62,7 @@ export default function ReviewCards({ infinite }) {
           <CardBoxItemWrapper>
             <StyledSlider {...settings}>
               {randomReveiw?.map((item) => (
-                <CardBoxItems key={item.id}>
+                <CardBoxItems to={`/detail/${item.id}`} key={item.id}>
                   <ItemsImgContainer>
                     <img src={item.imageUrl} alt="" />
                   </ItemsImgContainer>
@@ -117,7 +118,7 @@ export const CardBoxItemWrapper = styled.div`
   margin: 0px auto;
 `;
 
-export const CardBoxItems = styled.div`
+export const CardBoxItems = styled(Link)`
   flex-direction: column;
   color: rgb(51, 51, 51);
   cursor: pointer;
