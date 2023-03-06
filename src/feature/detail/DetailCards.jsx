@@ -12,15 +12,16 @@ import {
 } from '../../pages/home/components/ReviewCards';
 
 export default function DetailCards(props) {
+  const formattedPrice = props.item.price?.toLocaleString();
   return (
     <>
-      <CardBoxItems>
+      <CardBoxItems to={`/detail/${props.item.id}`}>
         <ItemsImgContainer>
           <img src={props.item.imageUrl} alt="" />
         </ItemsImgContainer>
         <ItemsInfoContainer>
           <InfoTitle>{props.item.title}</InfoTitle>
-          <InfoPriceContainer>{props.item.price}</InfoPriceContainer>
+          <InfoPriceContainer>{formattedPrice}</InfoPriceContainer>
           <InfoCommentWrapper>
             <InfoCommentContainer>
               <FaRegCommentAlt />

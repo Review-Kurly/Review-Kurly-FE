@@ -193,14 +193,13 @@ export default function AddReview() {
           </InputLayout>
           <InputLayout inputLayout>
             <MiniBox inputMiniBox>상세 리뷰</MiniBox>
-            <Input
+
+            <textarea
               name="content"
               value={content}
               onChange={reviewsOnChange}
-              reviewInput
-              type="textarea"
               placeholder="상세 리뷰를 입력해 주세요"
-              reveiwInput
+              minLength="1500"
             />
           </InputLayout>
         </AddReviewInputContainer>

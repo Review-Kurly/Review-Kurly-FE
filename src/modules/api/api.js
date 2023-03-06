@@ -69,6 +69,15 @@ export const getDetailReview = async ({ token, reviewId }) => {
       Authorization: `${token}`,
     },
   });
-  console.log('response', response);
+  return response.data;
+};
+
+// *========== 신상품 페이지 조회 ==========*
+export const getNewReview = async (token) => {
+  const response = await api.get('/api/reviews/new-reviews', {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
   return response.data;
 };
