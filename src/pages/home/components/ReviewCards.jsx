@@ -25,9 +25,6 @@ export default function ReviewCards({ infinite }) {
     nextArrow: showNextArrow ? <NextTo></NextTo> : null,
     afterChange: (currentSlide) => {
       const totalSlides = randomReveiw.length;
-
-      console.log('currentSlide --->', currentSlide);
-      console.log('totalSlides --->', totalSlides);
       if (currentSlide === 0) {
         setShowPrevArrow(false);
       } else {
@@ -68,7 +65,9 @@ export default function ReviewCards({ infinite }) {
                   </ItemsImgContainer>
                   <ItemsInfoContainer>
                     <InfoTitle>{item.title}</InfoTitle>
-                    <InfoPriceContainer>{item.price}</InfoPriceContainer>
+                    <InfoPriceContainer>
+                      {item.price.toLocaleString()}원
+                    </InfoPriceContainer>
                     <InfoCommentWrapper>
                       <InfoCommentContainer>
                         <FaRegCommentAlt />
@@ -143,6 +142,10 @@ export const ItemsImgContainer = styled.div`
     object-fit: cover;
     background-color: #f5f5f5;
     transition: all 0.5s ease-in-out 0s;
+    :hover {
+      transform: scale(1.02);
+      transition: all 0.3s ease-in-out 0s;
+    }
   }
 `;
 
@@ -170,6 +173,7 @@ export const InfoPriceContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 `;
 
 export const InfoCommentWrapper = styled.div`
