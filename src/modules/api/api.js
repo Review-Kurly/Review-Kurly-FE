@@ -71,14 +71,3 @@ export const getDetailReview = async ({ token, reviewId }) => {
   });
   return response.data;
 };
-
-// *========== 베스트 페이지 조회 ==========*
-export const getBestReview = async (token) => {
-  const response = await api.get('/api/reviews/best-reviews', {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
-  console.log(response);
-  return response.data;
-};

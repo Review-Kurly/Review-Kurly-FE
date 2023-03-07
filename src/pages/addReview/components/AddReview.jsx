@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { Input, InputLayout, MiniBox } from '../../../components/Input';
 import Button from '../../../components/Button';
@@ -12,20 +12,25 @@ import Spiner from '../../../components/Spiner';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddReview() {
-  const [
-    { description, title, price, market, purchaseUrl, content },
-    reviewsOnChange,
-  ] = useInputOnChange({
-    title: '',
-    price: '',
-    market: '',
-    purchaseUrl: '',
-    content: '',
-    description: '',
-  });
+  const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =
+    useInputOnChange({
+      title: '',
+      price: '',
+      market: '',
+      purchaseUrl: '',
+      description: '',
+    });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const token = Cookies.get('accessJWTToken');
+
+  // textarea 자동 높이 조절
+  const [content, setContent] = useState('');
+  const [height, setHeight] = useState('auto');
+
+  function handleTextArea(event) {
+    setContent(event.target.value);
+  }
 
   // 이미지 파일 데이터를 포함하는 FormData 객체 생성
   const [formImage, setFormImage] = useState(new FormData());
@@ -195,10 +200,10 @@ export default function AddReview() {
             <MiniBox inputMiniBox>상세 리뷰</MiniBox>
 
             <textarea
-              name="content"
               value={content}
-              onChange={reviewsOnChange}
+              onChange={handleTextArea}
               placeholder="상세 리뷰를 입력해 주세요"
+              style={{ height: height }}
               maxLength="1500"
             />
           </InputLayout>
@@ -217,13 +222,14 @@ export default function AddReview() {
 }
 
 const AddReviewForm = styled.form`
+  ${(props) => props.theme.FlexRow}
+  align-items: flex-start;
   max-width: 1050px;
   border-top: 2px solid black;
   min-height: 700px;
+  padding: 1rem 0;
   margin: auto;
   flex-wrap: wrap;
-
-  ${(props) => props.theme.FlexRow}
 `;
 
 const AddReviewTitle = styled.div`
@@ -243,8 +249,7 @@ const AddReviewImageLabel = styled.label`
 `;
 
 const AddReviewInputContainer = styled.div`
-  width: 640px;
-  height: 550px;
+  margin-bottom: 2rem;
 `;
 const AddReviewButtonContainer = styled.div`
   width: 970px;

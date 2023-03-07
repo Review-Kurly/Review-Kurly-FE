@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Spiner from '../../../components/Spiner';
 import { getDetailReview } from '../../../modules/api/api';
+import Button from '../../../components/Button';
 
 export default function DetailInfoCard() {
   const token = Cookies.get('accessJWTToken');
@@ -57,9 +58,11 @@ export default function DetailInfoCard() {
             <DetailInfoMiniBox>상세 리뷰</DetailInfoMiniBox>
             <DetailInfoDesc> {detailData?.content}</DetailInfoDesc>
           </DetailInfoLayout>
-          <DetailLikeButton>
-            <DetailLikeButtonSpan></DetailLikeButtonSpan>
-          </DetailLikeButton>
+          <DetailLikeContainer>
+            <Button likeChart>
+              <DetailLikeButtonSpan />
+            </Button>
+          </DetailLikeContainer>
         </DetailReviewInfoContainer>
       </DetailReviewContainer>
     </>
@@ -151,7 +154,7 @@ const DetailInfoMiniBox = styled.div`
 const DetailInfoDesc = styled.div`
   width: 432px;
   display: block;
-  font-size: 20px;
+
   color: rgb(102, 102, 102);
   padding-top: 4px;
   line-height: 25px;
@@ -163,19 +166,9 @@ const DetailInfoImg = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-
-const DetailLikeButton = styled.button`
-  display: block;
-  padding: 0px 10px;
-  text-align: center;
-  overflow: hidden;
-  width: 56px;
-  height: 56px;
-  border-radius: 3px;
-  color: rgb(51, 51, 51);
-  background-color: rgb(255, 255, 255);
-  border: 1px solid rgb(221, 221, 221);
-  cursor: pointer;
+const DetailLikeContainer = styled.div`
+  ${(props) => props.theme.FlexRow};
+  justify-content: flex-end;
 `;
 
 const DetailLikeButtonSpan = styled.span`
