@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Comment from './components/Comment';
 import DetailInfoCard from './components/DetailInfoCard';
 
 export default function DetailPg() {
@@ -8,8 +7,6 @@ export default function DetailPg() {
     <>
       <DetailReviewWrapper>
         <DetailInfoCard />
-
-        <Comment />
       </DetailReviewWrapper>
     </>
   );

@@ -4,8 +4,9 @@ import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Spiner from '../../../components/Spiner';
-import { getDetailReview } from '../../../modules/api/api';
 import Button from '../../../components/Button';
+import { getDetailReview } from '../../../modules/api/detailReviwApi';
+import Comment from './Comment';
 
 export default function DetailInfoCard() {
   const token = Cookies.get('accessJWTToken');
@@ -17,6 +18,7 @@ export default function DetailInfoCard() {
   );
 
   const detailData = data?.data;
+  const detailTitle = data?.data.title;
   if (isError) return;
 
   // 가격 1000단위 "," 표시
@@ -65,6 +67,7 @@ export default function DetailInfoCard() {
           </DetailLikeContainer>
         </DetailReviewInfoContainer>
       </DetailReviewContainer>
+      <Comment detailTitle={detailTitle} />
     </>
   );
 }
