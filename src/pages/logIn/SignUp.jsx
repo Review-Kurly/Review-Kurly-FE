@@ -154,14 +154,10 @@ export default function SignUp() {
     <>
       {signup.isLoading && <Spiner />}
       <SignUpTitleLayout>회원가입</SignUpTitleLayout>
-      <SignUpNeedsBox>
-        <RedPoint>*</RedPoint> 필수입력사항
-      </SignUpNeedsBox>
+      <SignUpNeedsBox>필수입력사항</SignUpNeedsBox>
       <SingUpForm onSubmit={signUpHandler}>
         <InputLayout>
-          <MiniBox>
-            아이디<RedPoint>*</RedPoint>
-          </MiniBox>
+          <MiniBox signup>아이디</MiniBox>
           <RegexCheckContainer>
             <Input
               value={inputId}
@@ -199,9 +195,7 @@ export default function SignUp() {
         </InputLayout>
 
         <InputLayout>
-          <MiniBox>
-            닉네임<RedPoint>*</RedPoint>
-          </MiniBox>
+          <MiniBox signup>닉네임</MiniBox>
           <RegexCheckContainer>
             <Input
               value={inputNickName}
@@ -236,9 +230,7 @@ export default function SignUp() {
           </SignUpSideBox>
         </InputLayout>
         <InputLayout>
-          <MiniBox>
-            이메일<RedPoint>*</RedPoint>
-          </MiniBox>
+          <MiniBox signup>이메일</MiniBox>
           <RegexCheckContainer>
             <Input
               value={inputEmail}
@@ -273,9 +265,7 @@ export default function SignUp() {
           </SignUpSideBox>
         </InputLayout>
         <InputLayout>
-          <MiniBox>
-            비밀번호<RedPoint>*</RedPoint>
-          </MiniBox>
+          <MiniBox signup>비밀번호</MiniBox>
           <RegexCheckContainer>
             <Input
               value={inputPw}
@@ -289,9 +279,7 @@ export default function SignUp() {
           <SignUpSideBox />
         </InputLayout>
         <InputLayout>
-          <MiniBox>
-            비밀번호확인<RedPoint>*</RedPoint>
-          </MiniBox>
+          <MiniBox signup>비밀번호확인</MiniBox>
           <RegexCheckContainer>
             <Input
               value={inputCheckPw}
@@ -357,6 +345,12 @@ const SignUpNeedsBox = styled.div`
   line-height: 17px;
   text-align: right;
   margin: auto;
+  &:before {
+    content: '\*';
+    font-size: 16px;
+    margin-right: 2px;
+    color: rgb(238, 106, 123);
+  }
 `;
 
 const SingUpForm = styled.form`
@@ -364,10 +358,6 @@ const SingUpForm = styled.form`
   min-height: 340px;
   margin: auto;
   margin-bottom: 30px;
-`;
-
-const RedPoint = styled.span`
-  color: rgb(238, 106, 123);
 `;
 
 const SignUpSideBox = styled.div`

@@ -142,8 +142,36 @@ const ButtonWrapper = styled.button`
       background-color: white;
     `}
 
+    ${(props) =>
+    props.sort &&
+    css`
+      margin-left: 8px;
+      font-size: 14px;
+      color: rgb(153, 153, 153);
+      &.active {
+        color: #000;
+        font-weight: bold;
+      }
+    `}
 
+    ${(props) =>
+    props.likeChart &&
+    css`
+      padding: 0px 10px;
+      text-align: center;
+      width: 56px;
+      height: 56px;
+      color: rgb(51, 51, 51);
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(221, 221, 221);
 
+      &:hover,
+      &:focus {
+        span {
+          background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBmaWxsPSIjRkY1QTVBIiBzdHJva2U9IiNGRjVBNUEiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K);
+        }
+      }
+    `}
 
   & {
     cursor: pointer;

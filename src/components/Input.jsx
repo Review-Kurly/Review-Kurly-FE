@@ -75,8 +75,21 @@ const LayoutWrapper = styled.div`
     props.inputLayout &&
     css`
       width: 640px;
-      height: 200px;
+      min-height: 150px;
     `}
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    height: auto;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid rgb(221, 221, 221);
+    resize: none;
+    outline: none;
+    overflow-y: hidden;
+  }
 `;
 
 export function MiniBox(props) {
@@ -101,6 +114,15 @@ const MiniBoxWrapper = styled.div`
     css`
       align-items: 'center';
       height: 180px;
+    `}
+  ${(props) =>
+    props.signup &&
+    css`
+      &:after {
+        content: '\*';
+        font-size: 16px;
+        color: rgb(238, 106, 123);
+      }
     `}
 `;
 
