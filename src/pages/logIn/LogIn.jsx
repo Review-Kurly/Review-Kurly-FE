@@ -10,12 +10,14 @@ import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../redux/authSlice';
 import isLogin from '../../modules/util/isLogin';
 import Spiner from '../../components/Spiner';
+import { DuplicateModal } from '../../components/Modal';
+import { useModalState } from '../../feature/hooks/useModalState';
 
 export default function LogIn() {
   const navigate = useNavigate();
   const moveToSignup = () => navigate('/sign-up');
-  const moveToHome = () => navigate('/');
   const dispatch = useDispatch();
+  const [loginModal, toggleModal] = useModalState(false);
 
   //토큰이 존재한다면 홈으로 리다이렉트
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function LogIn() {
   const login = useMutation(kurlyLogin, {
     onSuccess: (data) => {
       dispatch(loginSuccess());
-      moveToHome();
+      navigate(-1);
     },
     onError: (e) => {
       return;
@@ -39,9 +41,13 @@ export default function LogIn() {
     password: '',
   });
 
+  const isDisabled =
+    formValues.username.length <= 2 || formValues.password.length <= 2;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formValues.username !== '' && formValues.password !== '') {
+      toggleModal();
       login.mutate(formValues);
     }
   };
@@ -73,13 +79,24 @@ export default function LogIn() {
             placeholder="비밀번호를 입력해주세요"
           />
         </LogInInputLayout>
-        {errorMessage === 401
-          ? '패스워드가 일치하지 않습니다.'
-          : errorMessage === 400
-          ? '회원 정보가 없습니다. 회원가입을 진행해주세요.'
-          : ''}
+        {errorMessage && (
+          <DuplicateModal
+            isOpen={loginModal}
+            toggle={toggleModal}
+            onClose={toggleModal}
+          >
+            {errorMessage === 401
+              ? '패스워드가 일치하지 않습니다.'
+              : errorMessage === 400
+              ? '회원 정보가 없습니다. 회원가입을 진행해주세요.'
+              : ''}
+          </DuplicateModal>
+        )}
+
         <LogInInputLayout />
-        <Button login>로그인</Button>
+        <Button login disabled={isDisabled}>
+          로그인
+        </Button>
         <Button type="button" onClick={moveToSignup} signUp>
           회원가입
         </Button>

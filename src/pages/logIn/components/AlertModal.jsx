@@ -3,8 +3,9 @@ import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../../components/Button';
+import { CloseContainer, ModalMsgContainer } from '../../../components/Modal';
 
-export default function AlertModal({ onClose, children }) {
+export default function AlertModal({ onClose, children, onClick }) {
   const backdropVariants = {
     visible: { opacity: 1 },
     hidden: { opacity: 0 },
@@ -31,7 +32,12 @@ export default function AlertModal({ onClose, children }) {
           exit="hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <ModalMsg>{children}</ModalMsg>
+          <ModalMsgContainer>{children}</ModalMsgContainer>
+          <CloseContainer>
+            <Button onClick={onClick} closeModal>
+              확인
+            </Button>
+          </CloseContainer>
         </ModalContainer>
       </Backdrop>
     </AnimatePresence>
@@ -56,25 +62,4 @@ const ModalContainer = styled(motion.div)`
   margin: auto; /* 추가 */
   border-radius: 1rem;
   /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
-`;
-
-const ModalMsg = styled.div`
-  font-size: 16px;
-  padding: 40px 30px;
-  text-align: center;
-  letter-spacing: -0.5px;
-  white-space: pre-line;
-  line-height: 21px;
-  color: #333333;
-`;
-
-const CloseContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-top: 1px solid rgb(247, 247, 247);
-  height: 56px;
-  padding: 0px;
-  margin-top: 0px;
 `;

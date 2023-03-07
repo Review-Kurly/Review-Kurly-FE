@@ -12,7 +12,7 @@ export default function Modal({ isOpen, onClose, children }) {
 
   const modalVariants = {
     visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: '-100%' },
+    hidden: { opacity: 0, y: '-100%', transition: { duration: 0.1 } },
   };
 
   return (
@@ -33,11 +33,6 @@ export default function Modal({ isOpen, onClose, children }) {
             onClick={(e) => e.stopPropagation()}
           >
             {children}
-            <CloseContainer>
-              <Button onClick={onClose} closeModal type="button">
-                확인
-              </Button>
-            </CloseContainer>
           </ModalContainer>
         </Backdrop>
       )}
@@ -65,35 +60,73 @@ const ModalContainer = styled(motion.div)`
   /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
 `;
 
-const CloseContainer = styled.div`
+export const CloseContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   border-top: 1px solid rgb(247, 247, 247);
-  height: 56px;
-  padding: 0px;
+  min-height: 56px;
+  padding: ${(props) => props.padding};
   margin-top: 0px;
+  align-items: center;
 `;
 
-const DuplicateModalMsg = styled.div`
+export const ModalMsgContainer = styled.div`
   font-size: 16px;
   padding: 40px 30px;
   text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
   line-height: 21px;
+  font-weight: bold;
+  min-width: ${(props) => props.width};
   color: #333333;
 `;
 
-// 커스텀 모달 Children
-export function CustomModal(props) {
+const CloseButtonContainer = styled.div`
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+// 중복확인 커스텀 모달
+export function DuplicateModal(props) {
   return (
     <>
       {/* <Button onClick={props.click}>{props.btnTitle}</Button> */}
       <Modal isOpen={props.isOpen} onClose={props.toggle}>
-        <DuplicateModalMsg>{props.children}</DuplicateModalMsg>
+        <ModalMsgContainer>{props.children}</ModalMsgContainer>
+        <CloseContainer>
+          <Button onClick={props.onClose} closeModal type="button">
+            확인
+          </Button>
+        </CloseContainer>
       </Modal>
     </>
+  );
+}
+
+export function CommentModal(props) {
+  return (
+    <Modal isOpen={props.isOpen}>
+      <ModalMsgContainer width={'600px'}>{props.children}</ModalMsgContainer>
+      <CloseContainer>
+        <CloseButtonContainer>
+          <Button onClick={props.onClose} cancel type="button">
+            취소
+          </Button>
+          <Button
+            onClick={props.submit}
+            addReview
+            type="button"
+            disabled={props.disabled}
+          >
+            작성
+          </Button>
+        </CloseButtonContainer>
+      </CloseContainer>
+    </Modal>
   );
 }

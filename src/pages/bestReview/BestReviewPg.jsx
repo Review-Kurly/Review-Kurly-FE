@@ -45,6 +45,7 @@ export default function BestReviewPg() {
       {/* 최대값, 최솟값 정렬 버튼 */}
 
       <ReviewSortButtonContainer>
+        {/* TODO: 컴포넌트 말고 Map으로 반복되는 부분 구현해보기 */}
         <ReviewSortButtonLayout>
           <Button
             sort
@@ -54,6 +55,7 @@ export default function BestReviewPg() {
             베스트 리뷰순
           </Button>
         </ReviewSortButtonLayout>
+
         <ReviewSortButtonLayout>
           <Button
             sort
@@ -79,3 +81,11 @@ export default function BestReviewPg() {
     </>
   );
 }
+
+/*
+const sortCategory = [
+{type: 'default', value: '베스트 리뷰순'},
+{type: 'cheap', value: '낮은 가격순'},
+{type: 'expensive', value: '높은 가격순'}
+]
+*/

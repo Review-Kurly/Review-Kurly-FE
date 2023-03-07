@@ -18,7 +18,7 @@ export default function DetailInfoCard() {
   );
 
   const detailData = data?.data;
-  const detailTitle = data?.data.title;
+  const commentCnt = data?.data.commentCount;
   if (isError) return;
 
   // 가격 1000단위 "," 표시
@@ -67,14 +67,16 @@ export default function DetailInfoCard() {
           </DetailLikeContainer>
         </DetailReviewInfoContainer>
       </DetailReviewContainer>
-      <Comment detailTitle={detailTitle} />
+
+      {/* 댓글 시작 */}
+      <Comment detailData={detailData} comment={commentCnt} />
     </>
   );
 }
 
 const DetailReviewContainer = styled.div`
   width: 1050px;
-  min-height: 700px;
+  min-height: 600px;
   margin: auto;
   flex-wrap: wrap;
   margin: 30px 0px 20px 0px;
@@ -93,6 +95,7 @@ const DetailReviewImageLabel = styled.div`
 
 const DetailReviewInfoContainer = styled.div`
   width: 560px;
+  margin-top: 1rem;
 `;
 
 const DetailTitleContainer = styled.div`
@@ -125,7 +128,7 @@ const DetailPriceLayout = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  padding-top: 19px;
+  padding: 19px 0;
   font-weight: bold;
   font-size: 30px;
   line-height: 40px;
@@ -156,17 +159,13 @@ const DetailInfoMiniBox = styled.div`
 
 const DetailInfoDesc = styled.div`
   width: 432px;
-  display: block;
-
   color: rgb(102, 102, 102);
-  padding-top: 4px;
-  line-height: 25px;
-  white-space: pre-line;
 `;
 
 const DetailInfoImg = styled.img`
   width: 100%;
   height: 100%;
+  border-radius: 1rem;
   object-fit: cover;
 `;
 const DetailLikeContainer = styled.div`
