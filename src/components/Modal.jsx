@@ -12,7 +12,7 @@ export default function Modal({ isOpen, onClose, children }) {
 
   const modalVariants = {
     visible: { opacity: 1, y: 0 },
-    hidden: { opacity: 0, y: '-100%' },
+    hidden: { opacity: 0, y: '-100%', transition: { duration: 0.1 } },
   };
 
   return (
@@ -65,7 +65,7 @@ const ModalContainer = styled(motion.div)`
   /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
 `;
 
-const CloseContainer = styled.div`
+export const CloseContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   border-bottom-left-radius: 6px;
@@ -76,13 +76,14 @@ const CloseContainer = styled.div`
   margin-top: 0px;
 `;
 
-const DuplicateModalMsg = styled.div`
+export const DuplicateModalMsg = styled.div`
   font-size: 16px;
   padding: 40px 30px;
   text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
   line-height: 21px;
+  font-weight: bold;
   color: #333333;
 `;
 
