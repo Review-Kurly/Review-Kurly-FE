@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,14 @@ export default function Modal({ isOpen, onClose, children }) {
     visible: { opacity: 1, y: 0 },
     hidden: { opacity: 0, y: '-100%', transition: { duration: 0.1 } },
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
