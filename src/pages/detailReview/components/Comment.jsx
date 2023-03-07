@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import useInputOnChange from '../../../feature/hooks/useInputOnChange';
 import Spiner from '../../../components/Spiner';
 
-export default function Comment({ detailTitle }) {
+export default function Comment({ detailTitle, comment }) {
   const token = Cookies.get('accessJWTToken');
   const params = useParams();
   const reviewId = params.id;
@@ -19,7 +19,6 @@ export default function Comment({ detailTitle }) {
   const { isLoading, isError, data } = useQuery('DetailComment', () =>
     getDetailComment({ token, reviewId })
   );
-
   const commentData = data?.data;
 
   //날짜 수정 함수
@@ -28,6 +27,7 @@ export default function Comment({ detailTitle }) {
     return date.toLocaleDateString('ko-KR');
   };
 
+  //TODO: GET과 POST 리팩터링 해볼 예정
   const addContent = useMutation(
     () => postDetailComment({ token, reviewId, content }),
     {
@@ -59,7 +59,9 @@ export default function Comment({ detailTitle }) {
         <button onClick={submitComment}>댓글 작성</button>
       </div>
       <CommentTopLayout>
-        <span>총 72,496개</span>
+        <span>
+          {comment !== 0 ? `총 ${comment}개` : '아직 작성된 댓글이 없습니다.'}
+        </span>
         <div>
           <LikestButton>추천순</LikestButton>
           <LatestButton>최근등록순</LatestButton>

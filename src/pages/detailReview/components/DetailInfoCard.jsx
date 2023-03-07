@@ -19,6 +19,7 @@ export default function DetailInfoCard() {
 
   const detailData = data?.data;
   const detailTitle = data?.data.title;
+  const commentCnt = data?.data.commentCount;
   if (isError) return;
 
   // 가격 1000단위 "," 표시
@@ -67,7 +68,7 @@ export default function DetailInfoCard() {
           </DetailLikeContainer>
         </DetailReviewInfoContainer>
       </DetailReviewContainer>
-      <Comment detailTitle={detailTitle} />
+      <Comment detailTitle={detailTitle} comment={commentCnt} />
     </>
   );
 }

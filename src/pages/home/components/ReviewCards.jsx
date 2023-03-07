@@ -76,8 +76,8 @@ export default function ReviewCards({ infinite }) {
                       <span>
                         후기
                         {item.commentCount >= 5
-                          ? `${item.commentCount} +`
-                          : `${item.commentCount}`}{' '}
+                          ? ` ${item.commentCount} +`
+                          : ` ${item.commentCount}`}
                       </span>
                     </InfoCommentWrapper>
                   </ItemsInfoContainer>
