@@ -31,6 +31,16 @@ const ButtonWrapper = styled.button`
   pointer-events: ${(props) => (props.disabled ? 'none' : 'pointer')};
 
   ${(props) =>
+    props.comment &&
+    css`
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      color: rgb(255, 255, 255);
+      background-color: ${(props) => props.theme.CL.brandColor}; ;
+    `}
+
+  ${(props) =>
     props.closeModal &&
     css`
       width: 100%;
@@ -122,7 +132,8 @@ const ButtonWrapper = styled.button`
       color: white;
       font-weight: 500;
       border-radius: 3px;
-      background-color: ${(props) => props.theme.CL.brandColor};
+      background: ${(props) =>
+        props.disabled ? '#1d1d1d4e' : props.theme.CL.brandColor};
     `}
 
 
