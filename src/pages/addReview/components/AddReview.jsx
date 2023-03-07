@@ -199,7 +199,7 @@ export default function AddReview() {
               value={content}
               onChange={reviewsOnChange}
               placeholder="상세 리뷰를 입력해 주세요"
-              minLength="1500"
+              maxLength="1500"
             />
           </InputLayout>
         </AddReviewInputContainer>
