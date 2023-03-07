@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { CustomModal } from '../../components/Modal';
+import { useModalState } from '../../feature/hooks/useModalState';
+import isLogin from '../util/isLogin';
 
-const TokenCheck = () => {
+export default function TokenCheck() {
   const navigate = useNavigate();
   const location = useLocation();
   const getToken = Cookies.get('accessJWTToken');
@@ -19,10 +22,34 @@ const TokenCheck = () => {
   }, [isLoginPage, isSignupPage, getToken, navigate]);
 
   return null;
-};
-
-export default TokenCheck;
-
+}
 // 사용 방법
 // import TokenCheck from '../modules/util/TokenCheck';
 // TokenCheck();
+
+// 토큰이 없으면 접근을 못하게 (작성페이지, 마이페이지)
+
+export function AccessToken() {
+  const [modalAlert, toggleModal] = useModalState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin() === true) {
+      toggleModal(true);
+    }
+  }, [toggleModal]);
+
+  if (isLogin()) {
+    return navigate('/');
+  }
+
+  return (
+    <CustomModal isOpen={modalAlert} toggle={toggleModal}>
+      로그인이 필요합니다!.
+    </CustomModal>
+  );
+}
+
+// 사용 방법
+// import AccessToken from '../modules/util/AccessToken';
+// import Modal from '../../components/Modal';

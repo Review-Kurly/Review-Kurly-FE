@@ -71,6 +71,7 @@ export default function Header() {
                 name="search"
                 value={search}
                 onChange={titleInputHanlder}
+                placeholder="검색어를 입력해주세요"
               />
               <Button search>
                 <FaSearch size={'1.25rem'} />
@@ -201,7 +202,7 @@ const HeaderSearchContainer = styled.div`
   position: absolute;
   left: 20.3125rem;
   top: -3.4375rem;
-  width: 500px;
+  width: 405px;
   height: 48px;
   padding-left: 14px;
   border: 1px solid ${(props) => props.theme.CL.brandColor};
@@ -221,6 +222,7 @@ const HeaderSearchInput = styled.input`
   border: none;
   outline: none;
   letter-spacing: -0.33px;
+  font-size: 16px;
 `;
 
 const HeaderAddReviewWrapper = styled(HeaderSearchForm.withComponent('div'))``;

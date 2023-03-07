@@ -46,7 +46,7 @@ export default function ReviewCards({ infinite }) {
   );
 
   const randomReveiw = data?.data;
-
+  console.log(randomReveiw);
   if (isLoading) {
     return <Spiner />;
   }
@@ -73,7 +73,12 @@ export default function ReviewCards({ infinite }) {
                       <InfoCommentContainer>
                         <FaRegCommentAlt />
                       </InfoCommentContainer>
-                      <span>후기 {item.comment} +</span>
+                      <span>
+                        후기
+                        {item.commentCount >= 5
+                          ? `${item.commentCount} +`
+                          : `${item.commentCount}`}{' '}
+                      </span>
                     </InfoCommentWrapper>
                   </ItemsInfoContainer>
                 </CardBoxItems>

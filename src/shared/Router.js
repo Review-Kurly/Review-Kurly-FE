@@ -8,7 +8,7 @@ import Mypage from '../pages/mypage/Mypage';
 import SignUp from '../pages/logIn/SignUp';
 import LogIn from '../pages/logIn/LogIn';
 import Detail from '../pages/detailReview/DetailPg';
-import AddReview from '../pages/addReview/components/AddReview';
+import AddReview from '../pages/addReview/AddReviewPg';
 import ScrollToTop from '../feature/hooks/ScrollToTop';
 
 const Router = () => {
