@@ -3,7 +3,7 @@ import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../../components/Button';
-import { CloseContainer, DuplicateModalMsg } from '../../../components/Modal';
+import { CloseContainer, ModalMsgContainer } from '../../../components/Modal';
 
 export default function AlertModal({ onClose, children, onClick }) {
   const backdropVariants = {
@@ -32,7 +32,7 @@ export default function AlertModal({ onClose, children, onClick }) {
           exit="hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <DuplicateModalMsg>{children}</DuplicateModalMsg>
+          <ModalMsgContainer>{children}</ModalMsgContainer>
           <CloseContainer>
             <Button onClick={onClick} closeModal>
               확인

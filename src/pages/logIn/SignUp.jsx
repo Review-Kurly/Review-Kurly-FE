@@ -15,7 +15,7 @@ import Button from '../../components/Button';
 import useLoginInput from '../../feature/hooks/useLoginInput';
 import isLogin from '../../modules/util/isLogin';
 import Spiner from '../../components/Spiner';
-import { CustomModal } from '../../components/Modal';
+import { DuplicateModal } from '../../components/Modal';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -99,12 +99,11 @@ export default function SignUp() {
   const [inputEmail, inputEmailHandler, alertEmail, checkEmailRegx] =
     useLoginInput('', '', '이메일 형식으로 입력해주세요.', '', emailRegex);
 
-  const pwRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+  const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d$@$!%*#?&]{8,}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
     '',
     '',
-    '영문/숫자/특수문자(공백 제외)만 허용하며, 2개 이상 조합',
+    '영문/숫자/특수문자(공백 제외)만 허용, 8자리 이상',
     '사용 가능한 비밀번호 입니다.',
     pwRegex
   );
@@ -178,11 +177,15 @@ export default function SignUp() {
             )}
 
             {/* 아이디 중복 모달 */}
-            <CustomModal isOpen={modalId} toggle={toggleModalId}>
+            <DuplicateModal
+              isOpen={modalId}
+              toggle={toggleModalId}
+              onClose={toggleModalId}
+            >
               {duplicateIdMsg === false
                 ? '중복된 아이디 입니다!'
                 : '사용할 수 있는 아이디 입니다.'}
-            </CustomModal>
+            </DuplicateModal>
           </RegexCheckContainer>
           <SignUpSideBox>
             <Button
@@ -216,11 +219,15 @@ export default function SignUp() {
               </LoginAlertSpan>
             )}
             {/* 닉네임 중복 모달 */}
-            <CustomModal isOpen={modalNick} toggle={toggleModalNick}>
+            <DuplicateModal
+              isOpen={modalNick}
+              toggle={toggleModalNick}
+              onClose={toggleModalNick}
+            >
               {duplicateNicknameMsg === false
                 ? '중복된 닉네임 입니다!'
                 : '사용할 수 있는 닉네임 입니다.'}
-            </CustomModal>
+            </DuplicateModal>
           </RegexCheckContainer>
           <SignUpSideBox>
             <Button
@@ -251,11 +258,15 @@ export default function SignUp() {
               </LoginAlertSpan>
             )}
             {/* 이메일 중복 모달 */}
-            <CustomModal isOpen={modalEmail} toggle={toggleModalEmail}>
+            <DuplicateModal
+              isOpen={modalEmail}
+              toggle={toggleModalEmail}
+              onClose={toggleModalEmail}
+            >
               {duplicateEmailMsg === false
                 ? '중복된 이메일 입니다!'
                 : '사용할 수 있는 이메일 입니다.'}
-            </CustomModal>
+            </DuplicateModal>
           </RegexCheckContainer>
           <SignUpSideBox>
             <Button
