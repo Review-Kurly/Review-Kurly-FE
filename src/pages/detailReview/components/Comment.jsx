@@ -1,9 +1,63 @@
 import React from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
+import {
+  getDetailComment,
+  postDetailComment,
+} from '../../../modules/api/detailReviwApi';
+import Cookies from 'js-cookie';
+import { useParams } from 'react-router-dom';
+import useInputOnChange from '../../../feature/hooks/useInputOnChange';
+import Spiner from '../../../components/Spiner';
 
-export default function Comment() {
+export default function Comment({ detailTitle }) {
+  const token = Cookies.get('accessJWTToken');
+  const params = useParams();
+  const reviewId = params.id;
+  const queryClient = useQueryClient();
+
+  const { isLoading, isError, data } = useQuery('DetailComment', () =>
+    getDetailComment({ token, reviewId })
+  );
+
+  const commentData = data?.data;
+
+  //날짜 수정 함수
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR');
+  };
+
+  const addContent = useMutation(
+    () => postDetailComment({ token, reviewId, content }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('DetailComment');
+      },
+    }
+  );
+
+  const [{ content }, handleComment, reset] = useInputOnChange({ content: '' });
+
+  const submitComment = () => {
+    addContent.mutate(content);
+    reset();
+  };
+
+  if (isError) return;
+
   return (
     <>
+      {isLoading && <Spiner />}
+      <div>
+        <textarea
+          name="content"
+          type="text"
+          value={content}
+          onChange={handleComment}
+        />
+        <button onClick={submitComment}>댓글 작성</button>
+      </div>
       <CommentTopLayout>
         <span>총 72,496개</span>
         <div>
@@ -11,27 +65,28 @@ export default function Comment() {
           <LatestButton>최근등록순</LatestButton>
         </div>
       </CommentTopLayout>
-
-      <CommentBox>
-        <CommentNameBox>이**</CommentNameBox>
-        <CommentLayout>
-          <CommentTitleBox>[새벽수확] 유명산지 한판딸기 500g</CommentTitleBox>
-          <Comments>
-            <CommentP>딸기가 맛있어요</CommentP>
-          </Comments>
-          <CommetDate>
-            <div>
-              <span>2023.03.04</span>
-            </div>
-            <CommentThanksButton>
-              <CommentGood></CommentGood>
-              <span>도움돼요</span>
-            </CommentThanksButton>
-          </CommetDate>
-        </CommentLayout>
-      </CommentBox>
-
-      <CommentBox> 댓글입니다</CommentBox>
+      {commentData?.map((item) => {
+        return (
+          <CommentBox key={item?.id}>
+            <CommentNameBox>{item?.nickname}</CommentNameBox>
+            <CommentLayout>
+              <CommentTitleBox>{detailTitle}</CommentTitleBox>
+              <Comments>
+                <CommentP>{item?.content}</CommentP>
+              </Comments>
+              <CommetDate>
+                <div>
+                  <span>{formatDate(item?.createAt)}</span>
+                </div>
+                <CommentThanksButton>
+                  <CommentGood></CommentGood>
+                  <span>도움돼요</span>
+                </CommentThanksButton>
+              </CommetDate>
+            </CommentLayout>
+          </CommentBox>
+        );
+      })}
     </>
   );
 }

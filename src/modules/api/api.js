@@ -62,12 +62,7 @@ export const duplicateEmail = async (email) => {
   return response.data;
 };
 
-// *========== 상세 페이지 조회 ==========*
-export const getDetailReview = async ({ token, reviewId }) => {
-  const response = await api.get(`/api/reviews-details/${reviewId}`, {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
-  return response.data;
-};
+
+
+
+
