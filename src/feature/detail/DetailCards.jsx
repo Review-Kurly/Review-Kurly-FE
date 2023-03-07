@@ -21,7 +21,7 @@ export default function DetailCards(props) {
         </ItemsImgContainer>
         <ItemsInfoContainer>
           <InfoTitle>{props.item.title}</InfoTitle>
-          <InfoPriceContainer>{formattedPrice}</InfoPriceContainer>
+          <InfoPriceContainer>{formattedPrice}원</InfoPriceContainer>
           <InfoCommentWrapper>
             <InfoCommentContainer>
               <FaRegCommentAlt />
