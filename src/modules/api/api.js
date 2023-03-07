@@ -72,12 +72,13 @@ export const getDetailReview = async ({ token, reviewId }) => {
   return response.data;
 };
 
-// *========== 신상품 페이지 조회 ==========*
-export const getNewReview = async (token) => {
-  const response = await api.get('/api/reviews/new-reviews', {
+// *========== 베스트 페이지 조회 ==========*
+export const getBestReview = async (token) => {
+  const response = await api.get('/api/reviews/best-reviews', {
     headers: {
       Authorization: `${token}`,
     },
   });
+  console.log(response);
   return response.data;
 };

@@ -16,6 +16,7 @@ export default function DetailInfoCard() {
   );
 
   const detailData = data?.data;
+  if (isError) return;
 
   // 가격 1000단위 "," 표시
   const formattedPrice = detailData?.price.toLocaleString();

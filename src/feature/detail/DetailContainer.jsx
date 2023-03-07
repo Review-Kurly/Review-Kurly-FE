@@ -1,29 +1,18 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import {
   CardBoxTitle,
   HomeCardBoxWrapper,
 } from '../../pages/home/components/ReviewCards';
 import DetailCards from './DetailCards';
-import { getNewReview } from '../../modules/api/api';
-import Cookies from 'js-cookie';
-import Spiner from '../../components/Spiner';
 
-export default function DetailContainer() {
-  const token = Cookies.get('accessJWTToken');
-  const { isLoading, isError, data } = useQuery('getNewReview', () =>
-    getNewReview(token)
-  );
-  const newData = data?.data;
-
+export default function DetailContainer(props) {
   return (
     <>
-      {isLoading && <Spiner />}
       <HomeCardBoxWrapper>
-        <CardBoxTitle>{newData?.title}</CardBoxTitle>
+        <CardBoxTitle>{props.getData?.title}</CardBoxTitle>
         <CardBoxContatainer>
-          {newData?.map((item) => (
+          {props.getData?.map((item) => (
             <DetailCards key={item.id} item={item} />
           ))}
         </CardBoxContatainer>
