@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Input } from '../../components/Input';
 import Button from '../../components/Button';
@@ -16,7 +16,6 @@ import { useModalState } from '../../feature/hooks/useModalState';
 export default function LogIn() {
   const navigate = useNavigate();
   const moveToSignup = () => navigate('/sign-up');
-  const moveToHome = () => navigate('/');
   const dispatch = useDispatch();
   const [loginModal, toggleModal] = useModalState(false);
 

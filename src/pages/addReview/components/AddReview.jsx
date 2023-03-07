@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { Input, InputLayout, MiniBox } from '../../../components/Input';
 import Button from '../../../components/Button';
