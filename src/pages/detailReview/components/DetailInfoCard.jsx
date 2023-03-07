@@ -27,47 +27,50 @@ export default function DetailInfoCard() {
   return (
     <>
       {isLoading && <Spiner />}
-      <DetailReviewContainer>
-        <DetailReviewImageLabel>
-          <DetailInfoImg src={detailData?.imageUrl} alt="" />
-        </DetailReviewImageLabel>
-        <DetailReviewInfoContainer>
-          <DetailTitleContainer>
-            <DetailTitleLayout>{detailData?.title}</DetailTitleLayout>
+      {detailData && (
+        <DetailReviewContainer>
+          <DetailReviewImageLabel>
+            <DetailInfoImg src={detailData.imageUrl} alt="" />
+          </DetailReviewImageLabel>
+          <DetailReviewInfoContainer>
+            <DetailTitleContainer>
+              <DetailTitleLayout>
+                {`[${detailData.market}]`} {detailData.title}
+              </DetailTitleLayout>
 
-            <DetailSubTitle>{detailData?.description}</DetailSubTitle>
-          </DetailTitleContainer>
+              <DetailSubTitle>{detailData.description}</DetailSubTitle>
+            </DetailTitleContainer>
 
-          <DetailPriceLayout>{formattedPrice} 원</DetailPriceLayout>
+            <DetailPriceLayout>{formattedPrice} 원</DetailPriceLayout>
 
-          <DetailInfoLayout>
-            <DetailInfoMiniBox>판매처</DetailInfoMiniBox>
-            <DetailInfoDesc>{detailData?.market}</DetailInfoDesc>
-          </DetailInfoLayout>
-          <DetailInfoLayout>
-            <DetailInfoMiniBox>구매 링크</DetailInfoMiniBox>
-            <DetailInfoDesc>
-              <Link
-                to={detailData?.purchaseUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {detailData?.purchaseUrl}
-              </Link>
-            </DetailInfoDesc>
-          </DetailInfoLayout>
-          <DetailInfoLayout>
-            <DetailInfoMiniBox>상세 리뷰</DetailInfoMiniBox>
-            <DetailInfoDesc> {detailData?.content}</DetailInfoDesc>
-          </DetailInfoLayout>
-          <DetailLikeContainer>
-            <Button likeChart>
-              <DetailLikeButtonSpan />
-            </Button>
-          </DetailLikeContainer>
-        </DetailReviewInfoContainer>
-      </DetailReviewContainer>
-
+            <DetailInfoLayout>
+              <DetailInfoMiniBox>판매처</DetailInfoMiniBox>
+              <DetailInfoDesc>{detailData.market}</DetailInfoDesc>
+            </DetailInfoLayout>
+            <DetailInfoLayout>
+              <DetailInfoMiniBox>구매 링크</DetailInfoMiniBox>
+              <DetailInfoDesc>
+                <Link
+                  to={detailData.purchaseUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {detailData.purchaseUrl}
+                </Link>
+              </DetailInfoDesc>
+            </DetailInfoLayout>
+            <DetailInfoLayout>
+              <DetailInfoMiniBox>상세 리뷰</DetailInfoMiniBox>
+              <DetailInfoDesc> {detailData?.content}</DetailInfoDesc>
+            </DetailInfoLayout>
+            <DetailLikeContainer>
+              <Button likeChart>
+                <DetailLikeButtonSpan />
+              </Button>
+            </DetailLikeContainer>
+          </DetailReviewInfoContainer>
+        </DetailReviewContainer>
+      )}
       {/* 댓글 시작 */}
       <Comment detailData={detailData} comment={commentCnt} />
     </>
@@ -114,7 +117,7 @@ const DetailTitleLayout = styled.div`
   word-break: keep-all;
 `;
 
-const DetailSubTitle = styled.div`
+export const DetailSubTitle = styled.div`
   width: 560px;
   padding-top: 5px;
   font-size: 14px;

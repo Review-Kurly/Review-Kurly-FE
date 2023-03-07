@@ -99,7 +99,10 @@ export default function Comment({ comment, detailData }) {
 
             <RegImgTitleContainer>
               <RegImg src={detailData?.imageUrl} alt="" />
-              <RegReviewTitle>{detailData?.title}</RegReviewTitle>
+              <RegReviewTitle>
+                {`[${detailData?.market}]`} {detailData?.title}
+                <RegReviewDesc>{detailData?.description}</RegReviewDesc>
+              </RegReviewTitle>
             </RegImgTitleContainer>
             <RegCommentWrapper>
               <RegCommentContainer>
@@ -156,7 +159,9 @@ export default function Comment({ comment, detailData }) {
           <CommentBox key={item?.id}>
             <CommentNameBox>{item?.nickname}</CommentNameBox>
             <CommentLayout>
-              <CommentTitleBox>{detailData?.title}</CommentTitleBox>
+              <CommentTitleBox>
+                {`[${detailData?.market}]`} {detailData?.title}
+              </CommentTitleBox>
               <Comments>
                 <CommentP>{item?.content}</CommentP>
               </Comments>
@@ -330,15 +335,23 @@ const RegH1 = styled.span`
   border-bottom: 1px solid rgb(244, 244, 244);
   letter-spacing: -1px;
 `;
-const RegReviewTitle = styled.span`
+const RegReviewTitle = styled.div`
   font-size: 16px;
   font-weight: bold;
   line-height: 22px;
   color: rgb(51, 51, 51);
   text-overflow: ellipsis;
+  text-align: left;
   letter-spacing: normal;
 `;
-
+const RegReviewDesc = styled.p`
+  padding-top: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(181, 181, 181);
+  line-height: 19px;
+  letter-spacing: -0.5px;
+`;
 const RegImgTitleContainer = styled.div`
   display: flex;
   align-items: center;
