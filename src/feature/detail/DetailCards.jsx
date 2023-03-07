@@ -26,7 +26,12 @@ export default function DetailCards(props) {
             <InfoCommentContainer>
               <FaRegCommentAlt />
             </InfoCommentContainer>
-            <span>후기 {props.item.comment} +</span>
+            <span>
+              후기
+              {props.item.commentCount >= 5
+                ? ` ${props.item.commentCount} +`
+                : ` ${props.item.commentCount}`}
+            </span>
           </InfoCommentWrapper>
         </ItemsInfoContainer>
       </CardBoxItems>
