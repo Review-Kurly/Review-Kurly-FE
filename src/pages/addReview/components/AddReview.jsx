@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { Input, InputLayout, MiniBox } from '../../../components/Input';
 import Button from '../../../components/Button';
@@ -25,12 +25,18 @@ export default function AddReview() {
   const token = Cookies.get('accessJWTToken');
 
   // textarea 자동 높이 조절
+  const ref = useRef(null);
   const [content, setContent] = useState('');
-  const [height, setHeight] = useState('auto');
 
-  function handleTextArea(event) {
-    setContent(event.target.value);
-  }
+  const handleResizeHeight = useCallback((e) => {
+    setContent(e.target.value);
+    // ref 변수가 null인 경우 함수 종료
+    if (ref === null || ref.current === null) return;
+    // textarea 요소의 높이를 조절하기 위해 초기 높이값은 '38px'으로 지정
+    // textarea 요소의 scrollHeight 값을 이용하여 자동으로 높이 조절
+    ref.current.style.height = '38px';
+    ref.current.style.height = ref.current.scrollHeight + 'px';
+  }, []);
 
   // 이미지 파일 데이터를 포함하는 FormData 객체 생성
   const [formImage, setFormImage] = useState(new FormData());
@@ -153,6 +159,7 @@ export default function AddReview() {
               onChange={reviewsOnChange}
               type="text"
               placeholder="상품명을 입력해 주세요"
+              maxLength={30}
             />
           </InputLayout>
           <InputLayout>
@@ -163,6 +170,7 @@ export default function AddReview() {
               onChange={reviewsOnChange}
               type="text"
               placeholder="상품을 간단히 설명해 주세요"
+              maxLength={40}
             />
           </InputLayout>
           <InputLayout>
@@ -201,9 +209,10 @@ export default function AddReview() {
 
             <textarea
               value={content}
-              onChange={handleTextArea}
+              ref={ref}
+              style={{ height: '38px' }}
+              onChange={handleResizeHeight}
               placeholder="상세 리뷰를 입력해 주세요"
-              style={{ height: height }}
               maxLength="1500"
             />
           </InputLayout>
