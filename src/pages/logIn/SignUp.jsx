@@ -81,7 +81,7 @@ export default function SignUp() {
     idRegex
   );
 
-  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,10}$/;
+  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{3,10}$/;
   const [
     inputNickName,
     inputNickNameHandler,
@@ -90,7 +90,7 @@ export default function SignUp() {
   ] = useLoginInput(
     '',
     '',
-    '특수문자를 제외한, 2글자 이상의 닉네임을 입력해주세요.',
+    '특수문자를 제외한, 3글자 이상의 닉네임을 입력해주세요.',
     '',
     userNameReg
   );
@@ -165,6 +165,8 @@ export default function SignUp() {
               singupInput
               type="text"
               placeholder="아이디를 입력해주세요"
+              minLength={6}
+              maxLength={16}
             />
 
             {duplicateIdMsg === false ? (
@@ -203,6 +205,8 @@ export default function SignUp() {
               singupInput
               type="text"
               placeholder="닉네임을 입력해주세요"
+              minLength={3}
+              maxLength={10}
             />
             {duplicateNicknameMsg === false ? (
               <LoginAlertSpan>중복된 닉네임 입니다</LoginAlertSpan>
@@ -273,6 +277,7 @@ export default function SignUp() {
               singupInput
               type="password"
               placeholder="비밀번호를 입력해주세요"
+              minLength={8}
             />
             <LoginAlertSpan isCurrent={checkPwRegex}>{alertPw}</LoginAlertSpan>
           </RegexCheckContainer>
@@ -287,6 +292,7 @@ export default function SignUp() {
               singupInput
               type="password"
               placeholder="비밀번호를 한번 더 입력해주세요"
+              minLength={8}
             />
             <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
               {alertCheckPw}
