@@ -46,7 +46,6 @@ export default function DetailInfoCard() {
   const detailData = data?.data;
   const commentCnt = data?.data.commentCount;
   const isOwned = data?.data.owned;
-  console.log('상세페이지--->', isOwned);
 
   if (isError) return;
 

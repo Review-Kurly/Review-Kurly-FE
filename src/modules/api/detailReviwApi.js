@@ -82,3 +82,17 @@ export const editDetailComment = async ({ token, commentId, content }) => {
   );
   return response.data;
 };
+
+// *========== 상세 페이지 댓글 좋아요 ==========*
+export const commentLike = async ({ token, reviewId, commentId }) => {
+  const response = await api.post(
+    `/api/comments/likes/${reviewId}/${commentId}`,
+    {},
+    {
+      headers: {
+        Authorization: `${token}`,
+      },
+    }
+  );
+  return response.data;
+};

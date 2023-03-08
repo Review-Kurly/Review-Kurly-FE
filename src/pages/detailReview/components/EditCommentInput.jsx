@@ -2,15 +2,22 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import Button from '../../../elements/Button';
-import { editDetailComment } from '../../../modules/api/detailReviwApi';
+import {
+  commentLike,
+  editDetailComment,
+} from '../../../modules/api/detailReviwApi';
 import Cookies from 'js-cookie';
 import useAutoHeight from '../../../feature/hooks/useAutoHeight';
+import { useParams } from 'react-router-dom';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 export default function EditCommentInput(props) {
-  //댓글 수정 핸들러
+  //댓글 수정 토글
   const [display, setDisplay] = useState(false);
   const token = Cookies.get('accessJWTToken');
   const queryClient = useQueryClient();
+  const params = useParams();
+  const reviewId = params.id;
 
   const editCommentHandler = () => {
     setDisplay(!display);
@@ -21,6 +28,31 @@ export default function EditCommentInput(props) {
       queryClient.invalidateQueries('DetailComment');
     },
   });
+
+  // 댓글 좋아요
+
+  // 댓글 좋아요
+  const commentLikes = useMutation(commentLike, {
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: (error) => error,
+  });
+
+  const likedMutate = (commentId) => {
+    commentLikes.mutate({ token, commentId, reviewId });
+  };
+
+  const likedBtnHandler = (e) => {
+    e.preventDefault();
+    likedMutate(props.id);
+    queryClient.invalidateQueries(['DetailComment']);
+  };
+
+  const isLiked = commentLikes.data?.data.liked;
+  const likeCount = commentLikes.data?.data.likeCount;
+
+  console.log('isLiked ---->', isLiked, 'likeCount--->', likeCount);
 
   //input 높이 자동 조절 훅
   const { ref, content, setContent, handleResizeHeight } = useAutoHeight(
@@ -82,9 +114,10 @@ export default function EditCommentInput(props) {
           <div>
             <span>{props.date}</span>
           </div>
-          <CommentThanksButton>
-            <CommentGood></CommentGood>
-            <span>도움돼요</span>
+
+          <CommentThanksButton onClick={likedBtnHandler}>
+            {props.isLiked === true ? <AiFillHeart /> : <AiOutlineHeart />}
+            <span>도움돼요 {props.likeCount}</span>
           </CommentThanksButton>
         </CommetDate>
       </CommentLayout>
@@ -164,15 +197,19 @@ const CommentGood = styled.span`
   width: 0.9375rem;
   height: 0.9375rem;
   margin-right: 0.25rem;
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIKICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoCiAgICBkPSJNNC4wNDgzNyAxMi45OTk4SDIuMjE5MzVDMS41NDU5MiAxMi45OTk4IDEgMTIuNDYyNiAxIDExLjc5OTlWNy41OTk5MkMxIDYuOTM3MTggMS41NDU5MiA2LjM5OTkzIDIuMjE5MzUgNi4zOTk5M0g0LjA0ODM3TTguMzE2MDggNS4xOTk5NVYyLjc5OTk4QzguMzE2MDggMS44MDU4OCA3LjQ5NzIgMSA2LjQ4NzA2IDFMNC4wNDgzNyA2LjM5OTkzVjEyLjk5OTlIMTAuOTI1NUMxMS41MzM1IDEzLjAwNjYgMTIuMDUzNyAxMi41NzE1IDEyLjE0NDggMTEuOTc5OUwxMi45ODYyIDYuNTc5OTNDMTMuMDM5OSA2LjIzMTg1IDEyLjkzNTUgNS44NzgxMiAxMi43MDA4IDUuNjEyNDVDMTIuNDY2IDUuMzQ2NzggMTIuMTI0NiA1LjE5NTk2IDExLjc2NjggNS4xOTk5NUg4LjMxNjA4WiIKICAgIHN0cm9rZT0iIzk5OTk5OSIgc3Ryb2tlLXdpZHRoPSIxLjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICAgIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==)
-    center center no-repeat;
+  &.liked {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIKICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoCiAgICBkPSJNNC4wNDgzNyAxMi45OTk4SDIuMjE5MzVDMS41NDU5MiAxMi45OTk4IDEgMTIuNDYyNiAxIDExLjc5OTlWNy41OTk5MkMxIDYuOTM3MTggMS41NDU5MiA2LjM5OTkzIDIuMjE5MzUgNi4zOTk5M0g0LjA0ODM3TTguMzE2MDggNS4xOTk5NVYyLjc5OTk4QzguMzE2MDggMS44MDU4OCA3LjQ5NzIgMSA2LjQ4NzA2IDFMNC4wNDgzNyA2LjM5OTkzVjEyLjk5OTlIMTAuOTI1NUMxMS41MzM1IDEzLjAwNjYgMTIuMDUzNyAxMi41NzE1IDEyLjE0NDggMTEuOTc5OUwxMi45ODYyIDYuNTc5OTNDMTMuMDM5OSA2LjIzMTg1IDEyLjkzNTUgNS44NzgxMiAxMi43MDA4IDUuNjEyNDVDMTIuNDY2IDUuMzQ2NzggMTIuMTI0NiA1LjE5NTk2IDExLjc2NjggNS4xOTk5NUg4LjMxNjA4WiIKICAgIHN0cm9rZT0iIzVmMDA4MCIgc3Ryb2tlLXdpZHRoPSIxLjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICAgIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==)
+      center center no-repeat;
+  }
+  &.unLiked {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIKICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoCiAgICBkPSJNNC4wNDgzNyAxMi45OTk4SDIuMjE5MzVDMS41NDU5MiAxMi45OTk4IDEgMTIuNDYyNiAxIDExLjc5OTlWNy41OTk5MkMxIDYuOTM3MTggMS41NDU5MiA2LjM5OTkzIDIuMjE5MzUgNi4zOTk5M0g0LjA0ODM3TTguMzE2MDggNS4xOTk5NVYyLjc5OTk4QzguMzE2MDggMS44MDU4OCA3LjQ5NzIgMSA2LjQ4NzA2IDFMNC4wNDgzNyA2LjM5OTkzVjEyLjk5OTlIMTAuOTI1NUMxMS41MzM1IDEzLjAwNjYgMTIuMDUzNyAxMi41NzE1IDEyLjE0NDggMTEuOTc5OUwxMi45ODYyIDYuNTc5OTNDMTMuMDM5OSA2LjIzMTg1IDEyLjkzNTUgNS44NzgxMiAxMi43MDA4IDUuNjEyNDVDMTIuNDY2IDUuMzQ2NzggMTIuMTI0NiA1LjE5NTk2IDExLjc2NjggNS4xOTk5NUg4LjMxNjA4WiIKICAgIHN0cm9rZT0iIzk5OTk5OSIgc3Ryb2tlLXdpZHRoPSIxLjEiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICAgIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==)
+      center center no-repeat;
+  }
 `;
 
 const CommentThanksButton = styled.button`
   display: flex;
-  -webkit-box-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
   align-items: center;
   min-width: 5.5rem;
   height: 2rem;
@@ -185,7 +222,7 @@ const CommentThanksButton = styled.button`
   overflow: visible;
   background-color: transparent;
   cursor: pointer;
-  :hover {
+  &.liked {
     color: ${(props) => props.theme.CL.brandColor};
   }
 `;

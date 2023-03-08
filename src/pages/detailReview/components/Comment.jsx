@@ -28,11 +28,12 @@ export default function Comment({ comment, detailData }) {
   //유저 정보 가져옴
   const saveUserInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-  const { isLoading, isError, data } = useQuery('DetailComment', () =>
+  const { isLoading, isError, data } = useQuery(['DetailComment'], () =>
     getDetailComment({ token, reviewId })
   );
   const commentData = data?.data;
 
+  console.log('commentData', commentData);
   //날짜 수정 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -43,9 +44,7 @@ export default function Comment({ comment, detailData }) {
   const addContent = useMutation(
     () => postDetailComment({ token, reviewId, content }),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries('DetailComment');
-      },
+      onSuccess: () => queryClient.invalidateQueries(['DetailComment']),
     }
   );
 
@@ -77,12 +76,8 @@ export default function Comment({ comment, detailData }) {
   };
 
   const deleteContent = useMutation(deleteDetailComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('DetailComment');
-    },
-    onError: (error) => {
-      console.log(error);
-    },
+    onSuccess: () => queryClient.invalidateQueries(['DetailComment']),
+    onError: (error) => error,
   });
 
   //댓글 삭제 핸들러
@@ -172,22 +167,24 @@ export default function Comment({ comment, detailData }) {
           <Button commentBtn>최근등록순</Button>
         </CommentBtnLayout>
       </CommentTopLayout>
-      {commentData &&
-        commentData.map((item) => {
-          return (
-            <EditCommentInput
-              key={item.id}
-              nickname={item.nickname}
-              market={detailData?.market}
-              title={detailData?.title}
-              delete={() => deleteComment(item.id)}
-              content={item.content}
-              date={formatDate(item.createAt)}
-              owned={item.owned}
-              edit={item.id}
-            />
-          );
-        })}
+      {commentData?.map((item) => {
+        return (
+          <EditCommentInput
+            key={item.id}
+            nickname={item.nickname}
+            market={detailData?.market}
+            title={detailData?.title}
+            delete={() => deleteComment(item.id)}
+            content={item.content}
+            date={formatDate(item.createAt)}
+            owned={item.owned}
+            edit={item.id}
+            id={item.id}
+            isLiked={item.liked}
+            likeCount={item.likeCount}
+          />
+        );
+      })}
     </>
   );
 }
