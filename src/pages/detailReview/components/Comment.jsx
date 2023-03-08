@@ -5,7 +5,6 @@ import { RiErrorWarningFill } from 'react-icons/ri';
 import styled from 'styled-components';
 import {
   deleteDetailComment,
-  editDetailComment,
   getDetailComment,
   postDetailComment,
 } from '../../../modules/api/detailReviwApi';
@@ -17,7 +16,6 @@ import { useModalState } from '../../../feature/hooks/useModalState';
 import Button from '../../../elements/Button';
 import isLogin from '../../../modules/util/isLogin';
 import AlertModal from '../../logIn/components/AlertModal';
-import useInputOnChange from '../../../feature/hooks/useInputOnChange';
 import EditCommentInput from './EditCommentInput';
 
 export default function Comment({ comment, detailData }) {
@@ -50,12 +48,6 @@ export default function Comment({ comment, detailData }) {
       },
     }
   );
-
-  const editContent = useMutation(editDetailComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('DetailComment');
-    },
-  });
 
   // Textarea 모달 및 로그인 확인
   const [commentModal, toggleModal] = useModalState(false);
@@ -96,25 +88,6 @@ export default function Comment({ comment, detailData }) {
   //댓글 삭제 핸들러
   const deleteComment = (commentId) => {
     deleteContent.mutate({ token, commentId });
-  };
-
-  //댓글 수정 핸들러
-  const [display, setDisplay] = useState(false);
-  const editCommentHandler = () => {
-    setDisplay(!display);
-  };
-
-  const [editInputContent, editInputContentHandler] = useInputOnChange();
-  const newContent = editInputContent?.editInputContent;
-  const editComment = (commentId) => {
-    if (newContent !== '') {
-      editContent.mutate({
-        token,
-        commentId,
-        content: newContent,
-      });
-      setDisplay(!display);
-    }
   };
 
   if (isError) return;
@@ -209,14 +182,9 @@ export default function Comment({ comment, detailData }) {
               title={detailData?.title}
               delete={() => deleteComment(item.id)}
               content={item.content}
-              value={editInputContent?.value}
-              change={editInputContentHandler}
               date={formatDate(item.createAt)}
               owned={item.owned}
-              click={editCommentHandler}
-              isShow={display}
-              edit={() => editComment(item.id)}
-              cancel={editCommentHandler}
+              edit={item.id}
             />
           );
         })}
