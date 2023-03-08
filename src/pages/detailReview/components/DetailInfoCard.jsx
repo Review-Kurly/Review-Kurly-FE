@@ -1,17 +1,43 @@
 import Cookies from 'js-cookie';
 import React from 'react';
-import { useQuery } from 'react-query';
-import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Spiner from '../../../elements/Spiner';
 import Button from '../../../elements/Button';
-import { getDetailReview } from '../../../modules/api/detailReviwApi';
+import {
+  getDetailReview,
+  removeReview,
+} from '../../../modules/api/detailReviwApi';
 import Comment from './Comment';
+import { CenterLine } from './EditCommentInput';
 
 export default function DetailInfoCard() {
   const token = Cookies.get('accessJWTToken');
   const params = useParams();
   const reviewId = params.id;
+  const navigate = useNavigate();
+
+  //리뷰 삭제
+  const deleteMustation = useMutation(removeReview, {
+    onSuccess: (data) => {
+      return data;
+    },
+    onError: () => {
+      return;
+    },
+  });
+
+  //리뷰 삭제 핸들러
+  const deleteReviewHandler = (reviewId) => {
+    const confirmText = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmText) {
+      deleteMustation.mutate({ reviewId, token });
+      navigate('/');
+    } else {
+      return;
+    }
+  };
 
   const { isLoading, isError, data } = useQuery('getDetailReview', () =>
     getDetailReview({ token, reviewId })
@@ -19,6 +45,9 @@ export default function DetailInfoCard() {
 
   const detailData = data?.data;
   const commentCnt = data?.data.commentCount;
+  const isOwned = data?.data.owned;
+  console.log('상세페이지--->', isOwned);
+
   if (isError) return;
 
   // 가격 1000단위 "," 표시
@@ -34,6 +63,21 @@ export default function DetailInfoCard() {
           </DetailReviewImageLabel>
           <DetailReviewInfoContainer>
             <DetailTitleContainer>
+              {/* 게시글 수정 및 삭제 */}
+              {isOwned && (
+                <ReviewEditAndDelete>
+                  <Button
+                    commentBtn
+                    onClick={() => deleteReviewHandler(reviewId)}
+                  >
+                    삭제
+                  </Button>
+                  <CenterLine />
+                  <Button commentBtn onClick={() => {}}>
+                    수정
+                  </Button>
+                </ReviewEditAndDelete>
+              )}
               <DetailTitleLayout>
                 {`[${detailData.market}]`} {detailData.title}
               </DetailTitleLayout>
@@ -90,7 +134,7 @@ const DetailReviewContainer = styled.div`
 `;
 
 const DetailReviewImageLabel = styled.div`
-  width: 430;
+  width: 430px;
   height: 552px;
   margin-right: 20px;
   overflow: hidden;
@@ -103,7 +147,7 @@ const DetailReviewInfoContainer = styled.div`
 
 const DetailTitleContainer = styled.div`
   width: 560px;
-  height: 64px;
+  min-height: 64px;
   ${(props) => props.theme.FlexCol}
 `;
 
@@ -186,4 +230,10 @@ const DetailLikeButtonSpan = styled.span`
   vertical-align: top;
   background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K)
     center center no-repeat;
+`;
+
+const ReviewEditAndDelete = styled.div`
+  ${(props) => props.theme.FlexRow}
+  justify-content: flex-end;
+  width: 100%;
 `;

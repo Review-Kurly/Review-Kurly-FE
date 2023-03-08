@@ -166,6 +166,20 @@ const ButtonWrapper = styled.button`
     `}
 
     ${(props) =>
+    props.resetImg &&
+    css`
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      transition: background 0.5s ease 0s;
+      background: transparent;
+      background-image: url(${(props) => props.bg});
+    `}
+
+    ${(props) =>
     props.likeChart &&
     css`
       padding: 0px 10px;
