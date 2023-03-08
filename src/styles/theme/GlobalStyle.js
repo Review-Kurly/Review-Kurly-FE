@@ -62,14 +62,17 @@ export const GlobalStyle = createGlobalStyle`
       src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
       font-weight: normal;
       font-style: normal;
+
+      @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
     }
 
-      font-family: 'IBMPlexSansKR-Regular';
+      font-family: 'Noto Sans KR';
     }
 
     //반드시 overflow: overlay해야 -webkit-scrollbar-track 투명도를 설정할 수 있다.
     body {
       overflow: overlay;
+      overflow-x: hidden;
     }
     ::-webkit-scrollbar {
       width: 10px;
