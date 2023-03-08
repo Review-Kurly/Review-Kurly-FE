@@ -4,10 +4,10 @@ import { FaRegCommentAlt } from 'react-icons/fa';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { getReviewMainpg } from '../../../modules/api/api';
 import { useQuery } from 'react-query';
-import Spiner from '../../../components/Spiner';
+import Spiner from '../../../elements/Spiner';
 import { Link } from 'react-router-dom';
+import { getReviewMainpg } from '../../../modules/api/reviewDataApi';
 
 export default function ReviewCards({ infinite }) {
   const [showNextArrow, setShowNextArrow] = useState(true);
@@ -58,30 +58,31 @@ export default function ReviewCards({ infinite }) {
         <CardBoxContatainer>
           <CardBoxItemWrapper>
             <StyledSlider {...settings}>
-              {randomReveiw?.map((item) => (
-                <CardBoxItems to={`/detail/${item.id}`} key={item.id}>
-                  <ItemsImgContainer>
-                    <img src={item.imageUrl} alt="" />
-                  </ItemsImgContainer>
-                  <ItemsInfoContainer>
-                    <InfoTitle>{item.title}</InfoTitle>
-                    <InfoPriceContainer>
-                      {item.price.toLocaleString()}원
-                    </InfoPriceContainer>
-                    <InfoCommentWrapper>
-                      <InfoCommentContainer>
-                        <FaRegCommentAlt />
-                      </InfoCommentContainer>
-                      <span>
-                        후기
-                        {item.commentCount >= 5
-                          ? ` ${item.commentCount} +`
-                          : ` ${item.commentCount}`}
-                      </span>
-                    </InfoCommentWrapper>
-                  </ItemsInfoContainer>
-                </CardBoxItems>
-              ))}
+              {randomReveiw &&
+                randomReveiw.map((item) => (
+                  <CardBoxItems to={`/detail/${item.id}`} key={item.id}>
+                    <ItemsImgContainer>
+                      <img src={item.imageUrl} alt="" />
+                    </ItemsImgContainer>
+                    <ItemsInfoContainer>
+                      <InfoTitle>{item.title}</InfoTitle>
+                      <InfoPriceContainer>
+                        {item.price.toLocaleString()}원
+                      </InfoPriceContainer>
+                      <InfoCommentWrapper>
+                        <InfoCommentContainer>
+                          <FaRegCommentAlt />
+                        </InfoCommentContainer>
+                        <span>
+                          후기
+                          {item.commentCount >= 5
+                            ? ` ${item.commentCount} +`
+                            : ` ${item.commentCount}`}
+                        </span>
+                      </InfoCommentWrapper>
+                    </ItemsInfoContainer>
+                  </CardBoxItems>
+                ))}
             </StyledSlider>
           </CardBoxItemWrapper>
         </CardBoxContatainer>

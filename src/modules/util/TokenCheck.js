@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { CustomModal } from '../../components/Modal';
+import { CustomModal } from '../../elements/Modal';
 import { useModalState } from '../../feature/hooks/useModalState';
 import isLogin from '../util/isLogin';
 
@@ -52,4 +52,4 @@ export function AccessToken() {
 
 // 사용 방법
 // import AccessToken from '../modules/util/AccessToken';
-// import Modal from '../../components/Modal';
+// import Modal from '../../elements/Modal';

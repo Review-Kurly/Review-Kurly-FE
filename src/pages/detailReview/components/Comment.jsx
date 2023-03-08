@@ -4,15 +4,16 @@ import { AiFillAlert } from 'react-icons/ai';
 import { RiErrorWarningFill } from 'react-icons/ri';
 import styled from 'styled-components';
 import {
+  deleteDetailComment,
   getDetailComment,
   postDetailComment,
 } from '../../../modules/api/detailReviwApi';
 import Cookies from 'js-cookie';
 import { useParams, useNavigate } from 'react-router-dom';
-import Spiner from '../../../components/Spiner';
-import { CommentModal } from '../../../components/Modal';
+import Spiner from '../../../elements/Spiner';
+import { CommentModal } from '../../../elements/Modal';
 import { useModalState } from '../../../feature/hooks/useModalState';
-import Button from '../../../components/Button';
+import Button from '../../../elements/Button';
 import isLogin from '../../../modules/util/isLogin';
 import AlertModal from '../../logIn/components/AlertModal';
 
@@ -26,8 +27,10 @@ export default function Comment({ comment, detailData }) {
   //유저 정보 가져옴
   const saveUserInfo = JSON.parse(localStorage.getItem('userInfo'));
 
+  console.log(saveUserInfo);
+
   const { isLoading, isError, data } = useQuery('DetailComment', () =>
-    getDetailComment({ token, reviewId })
+    getDetailComment(reviewId)
   );
   const commentData = data?.data;
 
@@ -47,6 +50,12 @@ export default function Comment({ comment, detailData }) {
     }
   );
 
+  const deleteContent = useMutation(deleteDetailComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('DetailComment');
+    },
+  });
+
   // Textarea 모달 및 로그인 확인
   const [commentModal, toggleModal] = useModalState(false);
   const [content, setContent] = useState('');
@@ -65,12 +74,19 @@ export default function Comment({ comment, detailData }) {
     } else {
       addContent.mutate(content);
       toggleModal(true);
+      setContent('');
     }
   };
 
   const handleModalClose = () => {
     toggleModal(false);
     navigate('/login');
+  };
+
+  //댓글 삭제 핸들러
+  const deleteComment = (commentId) => {
+    console.log(commentId);
+    deleteContent.mutate({ token, commentId });
   };
 
   if (isError) return;
@@ -149,35 +165,44 @@ export default function Comment({ comment, detailData }) {
         <span>
           {comment !== 0 ? `총 ${comment}개` : '아직 작성된 댓글이 없습니다.'}
         </span>
-        <div>
-          <LikestButton>추천순</LikestButton>
-          <LatestButton>최근등록순</LatestButton>
-        </div>
+        <CommentBtnLayout>
+          <Button commentBtn>추천순</Button>
+          <CenterLine />
+          <Button commentBtn>최근등록순</Button>
+        </CommentBtnLayout>
       </CommentTopLayout>
-      {commentData?.map((item) => {
-        return (
-          <CommentBox key={item?.id}>
-            <CommentNameBox>{item?.nickname}</CommentNameBox>
-            <CommentLayout>
-              <CommentTitleBox>
-                {`[${detailData?.market}]`} {detailData?.title}
-              </CommentTitleBox>
-              <Comments>
-                <CommentP>{item?.content}</CommentP>
-              </Comments>
-              <CommetDate>
-                <div>
-                  <span>{formatDate(item?.createAt)}</span>
-                </div>
-                <CommentThanksButton>
-                  <CommentGood></CommentGood>
-                  <span>도움돼요</span>
-                </CommentThanksButton>
-              </CommetDate>
-            </CommentLayout>
-          </CommentBox>
-        );
-      })}
+      {commentData &&
+        commentData.map((item) => {
+          return (
+            <CommentBox key={item.id}>
+              <CommentNameBox>{item.nickname}</CommentNameBox>
+              <CommentLayout>
+                <CommentTitleBox>
+                  {`[${detailData?.market}]`} {detailData?.title}
+                  <CommentBtnLayout>
+                    <Button commentBtn onClick={() => deleteComment(item.id)}>
+                      삭제
+                    </Button>
+                    <CenterLine />
+                    <Button commentBtn>수정</Button>
+                  </CommentBtnLayout>
+                </CommentTitleBox>
+                <Comments>
+                  <CommentP>{item.content}</CommentP>
+                </Comments>
+                <CommetDate>
+                  <div>
+                    <span>{formatDate(item.createAt)}</span>
+                  </div>
+                  <CommentThanksButton>
+                    <CommentGood></CommentGood>
+                    <span>도움돼요</span>
+                  </CommentThanksButton>
+                </CommetDate>
+              </CommentLayout>
+            </CommentBox>
+          );
+        })}
     </>
   );
 }
@@ -216,13 +241,12 @@ const CommentLayout = styled.div`
 const CommentTitleBox = styled.div`
   width: 800px;
   box-sizing: border-box;
-  display: flex;
   -webkit-box-align: center;
-  align-items: center;
   gap: 5px;
   height: 19px;
   padding-right: 20px;
   color: rgb(153, 153, 153);
+  ${(props) => props.theme.FlexRowBetween}
 `;
 
 const Comments = styled.div`
@@ -252,30 +276,15 @@ const CommetDate = styled.div`
   ${(props) => props.theme.FlexRowBetween};
 `;
 
-const LatestButton = styled.button`
-  position: relative;
-  font-weight: 400;
-  font-size: 12px;
-  color: #999;
-  overflow: visible;
-  background-color: transparent;
-  border: none;
-  margin-left: 8px;
-  margin-right: 8px;
-  cursor: pointer;
+const CommentBtnLayout = styled.div`
+  ${(props) => props.theme.FlexRow}
 `;
 
-const LikestButton = styled.button`
-  position: relative;
-  font-weight: 400;
-  font-size: 12px;
-  color: #999;
-  overflow: visible;
-  background-color: transparent;
-  border: none;
-  margin-left: 8px;
-  margin-right: 8px;
-  cursor: pointer;
+const CenterLine = styled.div`
+  width: 1px;
+  height: 13px;
+  margin: 0px 5px;
+  background-color: rgb(217, 217, 217);
 `;
 
 const CommentGood = styled.span`

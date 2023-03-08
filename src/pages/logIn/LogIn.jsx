@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Input } from '../../components/Input';
-import Button from '../../components/Button';
+import { Input } from '../../elements/Input';
+import Button from '../../elements/Button';
 import { useNavigate } from 'react-router-dom';
 import useInputOnChange from '../../feature/hooks/useInputOnChange';
-import { kurlyLogin } from '../../modules/api/api';
 import { useMutation } from 'react-query';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../redux/authSlice';
 import isLogin from '../../modules/util/isLogin';
-import Spiner from '../../components/Spiner';
-import { DuplicateModal } from '../../components/Modal';
+import Spiner from '../../elements/Spiner';
+import { DuplicateModal } from '../../elements/Modal';
 import { useModalState } from '../../feature/hooks/useModalState';
+import { kurlyLogin } from '../../modules/api/userInfoApi';
 
 export default function LogIn() {
   const navigate = useNavigate();

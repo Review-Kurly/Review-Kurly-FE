@@ -7,15 +7,15 @@ import {
   Input,
   MiniBox,
   LoginAlertSpan,
-} from '../../components/Input';
-import { postRegister } from '../../modules/api/api';
+} from '../../elements/Input';
 import { useDuplicateCheck } from '../../feature/hooks/useCheckDuplicate';
 import { useModalState } from '../../feature/hooks/useModalState';
-import Button from '../../components/Button';
+import Button from '../../elements/Button';
 import useLoginInput from '../../feature/hooks/useLoginInput';
 import isLogin from '../../modules/util/isLogin';
-import Spiner from '../../components/Spiner';
-import { DuplicateModal } from '../../components/Modal';
+import Spiner from '../../elements/Spiner';
+import { DuplicateModal } from '../../elements/Modal';
+import { postRegister } from '../../modules/api/userInfoApi';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -337,6 +337,7 @@ export default function SignUp() {
     </>
   );
 }
+
 const RegexCheckContainer = styled.div`
   ${(props) => props.theme.FlexCol}
 `;

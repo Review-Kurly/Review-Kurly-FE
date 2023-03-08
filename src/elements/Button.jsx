@@ -192,4 +192,15 @@ const ButtonWrapper = styled.button`
   &:hover {
     opacity: 0.9;
   }
+
+  ${(props) =>
+    props.commentBtn &&
+    css`
+      font-size: 12px;
+      color: rgb(153, 153, 153);
+      background-color: transparent;
+      border: none;
+      margin-right: 8px;
+      cursor: pointer;
+    `}
 `;

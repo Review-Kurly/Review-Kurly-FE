@@ -1,15 +1,15 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import { Input, InputLayout, MiniBox } from '../../../components/Input';
-import Button from '../../../components/Button';
+import { Input, InputLayout, MiniBox } from '../../../elements/Input';
+import Button from '../../../elements/Button';
 //npm i browser-image-compression
 import imageCompression from 'browser-image-compression';
 import { useQueryClient, useMutation } from 'react-query';
 import useInputOnChange from '../../../feature/hooks/useInputOnChange';
 import Cookies from 'js-cookie';
-import { addReview } from '../../../modules/api/api';
-import Spiner from '../../../components/Spiner';
+import Spiner from '../../../elements/Spiner';
 import { useNavigate } from 'react-router-dom';
+import { addReview } from '../../../modules/api/detailReviwApi';
 
 export default function AddReview() {
   const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =

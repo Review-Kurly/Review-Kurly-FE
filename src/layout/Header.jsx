@@ -5,7 +5,7 @@ import { FaSearch } from 'react-icons/fa';
 import { BsHeart, BsClipboardPlus } from 'react-icons/bs';
 import logo from '../styles/img/logo.svg';
 import useInputOnChange from '../feature/hooks/useInputOnChange';
-import Button from '../components/Button';
+import Button from '../elements/Button';
 import Cookies from 'js-cookie';
 import { logoutSuccess } from '../redux/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
