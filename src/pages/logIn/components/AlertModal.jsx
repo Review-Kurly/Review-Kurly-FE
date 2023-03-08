@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
-import Button from '../../../components/Button';
-import { CloseContainer, ModalMsgContainer } from '../../../components/Modal';
+import Button from '../../../elements/Button';
+import { CloseContainer, ModalMsgContainer } from '../../../elements/Modal';
 
 export default function AlertModal({ onClose, children, onClick }) {
   const backdropVariants = {

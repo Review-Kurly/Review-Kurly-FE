@@ -1,23 +1,21 @@
-import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import DetailContainer from '../../feature/detail/DetailContainer';
-import Spiner from '../../components/Spiner';
-import { getBestReview } from '../../modules/api/bestReviewApi';
+import Spiner from '../../elements/Spiner';
 import {
   ReviewSortButtonContainer,
   ReviewSortButtonLayout,
   ReviewTitleLayout,
 } from '../newReview/NewReviewPg';
-import Button from '../../components/Button';
+import Button from '../../elements/Button';
+import { getBestReview } from '../../modules/api/reviewDataApi';
 
 export default function BestReviewPg() {
-  const token = Cookies.get('accessJWTToken');
   const [sortActive, setSortActive] = useState('default');
 
   const [sort, setSort] = useState(''); // sort의 상태를 저장하려고 state 사용
   const { isLoading, isError, data } = useQuery(['getBestReview', sort], () =>
-    getBestReview(token, sort)
+    getBestReview(sort)
   );
   const getData = data?.data;
   if (isError) return;

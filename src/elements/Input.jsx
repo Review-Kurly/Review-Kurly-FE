@@ -131,6 +131,6 @@ export const LoginAlertSpan = styled.p`
   width: 330px;
   text-align: start;
   font-size: 0.8rem;
-  padding: 0 0.2rem;
+  padding: 0.2rem;
   color: ${(props) => (props.isCurrent ? '#58793e' : 'tomato')};
 `;

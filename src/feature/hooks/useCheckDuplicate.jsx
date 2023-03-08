@@ -1,9 +1,10 @@
 import { useMutation } from 'react-query';
+
 import {
   duplicateId,
   duplicateNickname,
   duplicateEmail,
-} from '../../modules/api/api';
+} from '../../modules/api/userInfoApi';
 
 export const useDuplicateCheck = () => {
   // 아이디 중복 확인

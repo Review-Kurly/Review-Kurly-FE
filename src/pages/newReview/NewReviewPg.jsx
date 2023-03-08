@@ -1,20 +1,17 @@
-import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import DetailContainer from '../../feature/detail/DetailContainer';
-import Spiner from '../../components/Spiner';
-import { getNewReview } from '../../modules/api/newReviewApi';
+import Spiner from '../../elements/Spiner';
 import styled from 'styled-components';
-import Button from '../../components/Button';
+import Button from '../../elements/Button';
+import { getNewReview } from '../../modules/api/reviewDataApi';
 
 export default function NewReviewPg() {
-  const token = Cookies.get('accessJWTToken');
-
   const [sortActive, setSortActive] = useState('default');
 
   const [sort, setSort] = useState(''); // sort의 상태를 저장하려고 state 사용
   const { isLoading, isError, data } = useQuery(['getNewReview', sort], () =>
-    getNewReview(token, sort)
+    getNewReview(sort)
   );
   const getData = data?.data;
   if (isError) return;

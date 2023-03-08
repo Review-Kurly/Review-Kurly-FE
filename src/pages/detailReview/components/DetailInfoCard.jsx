@@ -3,8 +3,8 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import Spiner from '../../../components/Spiner';
-import Button from '../../../components/Button';
+import Spiner from '../../../elements/Spiner';
+import Button from '../../../elements/Button';
 import { getDetailReview } from '../../../modules/api/detailReviwApi';
 import Comment from './Comment';
 

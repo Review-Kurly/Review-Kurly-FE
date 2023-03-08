@@ -5,6 +5,23 @@ const useLoginInput = (value, initial, reject, success, Reg, samePw) => {
   const [alert, setAlert] = useState(initial);
   const [checkReg, setCheckReg] = useState(false);
 
+  const checkSamePw = useCallback(
+    (e) => {
+      setInput(e.target.value);
+      if (e.target.value === samePw && e.target.value !== '') {
+        setAlert(success);
+        setCheckReg(true);
+      } else if (e.target.value === '' || samePw === '') {
+        setAlert(reject);
+        setCheckReg(false);
+      } else {
+        setAlert(reject);
+        setCheckReg(false);
+      }
+    },
+    [samePw, reject, success]
+  );
+
   const setInputHandler = useCallback(
     (e) => {
       setInput(e.target.value);
@@ -17,30 +34,13 @@ const useLoginInput = (value, initial, reject, success, Reg, samePw) => {
       } else {
         setAlert(success);
         setCheckReg(true);
+        if (samePw) {
+          checkSamePw({ target: { value: samePw } });
+        }
       }
-      // if (e.target.value === '') {
-      //   setAlert('');
-      // }
     },
-    [Reg, reject, success]
+    [Reg, reject, success, samePw, checkSamePw]
   );
-
-  const checkSamePw = (e) => {
-    setInput(e.target.value);
-    if (e.target.value === samePw && e.target.value !== '') {
-      setAlert(success);
-      setCheckReg(true);
-    } else if (e.target.value === '' || samePw === '') {
-      setAlert(reject);
-      setCheckReg(false);
-    } else {
-      setAlert(reject);
-      setCheckReg(false);
-    }
-    // if (e.target.value === '') {
-    //   setAlert('');
-    // }
-  };
 
   return [input, setInputHandler, alert, checkReg, checkSamePw];
 };

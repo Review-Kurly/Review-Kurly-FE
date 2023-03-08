@@ -26,24 +26,6 @@ export const kurlyLogin = async (data) => {
   console.log('로그인 성공');
 };
 
-// *========== 상세 페이지 등록 ==========*
-export const addReview = async ({ token, data }) => {
-  console.log('data--->', data);
-  const response = await api.post(`/api/reviews-details/`, data, {
-    headers: {
-      Authorization: `${token}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
-};
-
-// *========== 메인 페이지 조회 ==========*
-export const getReviewMainpg = async () => {
-  const response = await api.get('/api/reviews/');
-  return response.data;
-};
-
 // *========== 아이디 중복 확인 체크 ==========*
 export const duplicateId = async (username) => {
   const response = await api.get(`/api/users/uniqueness/username/${username}`);
@@ -61,8 +43,3 @@ export const duplicateEmail = async (email) => {
   const response = await api.get(`/api/users/uniqueness/email/${email}`);
   return response.data;
 };
-
-
-
-
-
