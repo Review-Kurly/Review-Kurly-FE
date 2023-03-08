@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
@@ -9,12 +9,13 @@ import Button from '../elements/Button';
 import Cookies from 'js-cookie';
 import { logoutSuccess } from '../redux/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { getSearchSlice } from '../redux/getSearchSlice';
 export default function Header() {
-  const [{ search }, titleInputHanlder] = useInputOnChange({ search: '' });
   const navigate = useNavigate();
   const moveToAddReview = () => navigate('/add-review');
   const moveToHome = () => navigate('/');
   const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
 
   //로그인이 되어있는지 체크하기위해 스토어에서 가져오기
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -29,6 +30,16 @@ export default function Header() {
     dispatch(logoutSuccess());
     moveToHome();
   }
+
+  const inputChangeHandler = useCallback((e) => {
+    setSearch(e.target.value);
+  }, []);
+
+  const searchClick = (e) => {
+    e.preventDefault();
+    navigate('/search-review');
+    dispatch(getSearchSlice(search));
+  };
 
   return (
     <>
@@ -65,12 +76,11 @@ export default function Header() {
             <LogoLink to="/">리뷰컬리</LogoLink>
           </HeaderLogoContainer>
           {/* 검색창 */}
-          <HeaderSearchForm>
+          <HeaderSearchForm onSubmit={searchClick}>
             <HeaderSearchContainer>
               <HeaderSearchInput
-                name="search"
                 value={search}
-                onChange={titleInputHanlder}
+                onChange={inputChangeHandler}
                 placeholder="검색어를 입력해주세요"
               />
               <Button search>
