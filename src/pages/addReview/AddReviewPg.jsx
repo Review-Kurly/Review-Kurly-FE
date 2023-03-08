@@ -22,7 +22,7 @@ function AddReviewPg() {
 
   return (
     <>
-      {isLogin() === true && <AddReview />}
+      {isLogin() && <AddReview />}
       {isModalOpen && (
         <AlertModal onClose={handleModalClose} onClick={handleModalClose}>
           로그인하셔야 본 서비스를 이용하실 수 있습니다.

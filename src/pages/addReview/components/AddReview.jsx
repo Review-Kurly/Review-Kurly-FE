@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { Input, InputLayout, MiniBox } from '../../../elements/Input';
 import Button from '../../../elements/Button';
@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import { addReview } from '../../../modules/api/detailReviwApi';
 import uploadImg from '../../../styles/img/uploadImg.svg';
 import xmark from '../../../styles/img/xmark.svg';
-import useAutoHeight from '../../../feature/hooks/useAutoHeight';
 
 export default function AddReview() {
   const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =
@@ -28,7 +27,18 @@ export default function AddReview() {
   const token = Cookies.get('accessJWTToken');
 
   // textarea 자동 높이 조절
-  const { ref, content, handleResizeHeight } = useAutoHeight();
+  const ref = useRef(null);
+  const [content, setContent] = useState('');
+
+  const handleResizeHeight = useCallback((e) => {
+    setContent(e.target.value);
+    // ref 변수가 null인 경우 함수 종료
+    if (ref === null || ref.current === null) return;
+    // textarea 요소의 높이를 조절하기 위해 초기 높이값은 '38px'으로 지정
+    // textarea 요소의 scrollHeight 값을 이용하여 자동으로 높이 조절
+    ref.current.style.height = '38px';
+    ref.current.style.height = ref.current.scrollHeight + 'px';
+  }, []);
 
   // 이미지 파일 데이터를 포함하는 FormData 객체 생성
   const [formImage, setFormImage] = useState(new FormData());

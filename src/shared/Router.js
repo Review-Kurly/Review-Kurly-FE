@@ -10,6 +10,7 @@ import LogIn from '../pages/logIn/LogIn';
 import Detail from '../pages/detailReview/DetailPg';
 import AddReview from '../pages/addReview/AddReviewPg';
 import ScrollToTop from '../feature/hooks/ScrollToTop';
+import SearchView from '../pages/searchReview/SearchView';
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/new-review" element={<NewReview />} />
           <Route path="/best-review" element={<BestReview />} />
+          <Route path="/search-review" element={<SearchView />} />
           <Route path="/mypage" element={<Mypage />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
