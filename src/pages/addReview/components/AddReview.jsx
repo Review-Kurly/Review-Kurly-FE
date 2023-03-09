@@ -94,7 +94,8 @@ export default function AddReview() {
   const postReviews = useMutation(addReview, {
     onSuccess: (data) => {
       console.log('addreview data --->', data);
-      navigate(`/detail/${data.data.id}`);
+      navigate(`/detail/${data.data.id}`); //트러블슈팅
+      queryClient.invalidateQueries('getDetailReview');
     },
     onError: (e) => {
       console.log('addReview Error --->', e);

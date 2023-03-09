@@ -14,6 +14,7 @@ export default function Header() {
   const navigate = useNavigate();
   const moveToAddReview = () => navigate('/add-review');
   const moveToHome = () => navigate('/');
+  const moveToHeartCart = () => navigate('/mypage');
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
@@ -97,7 +98,7 @@ export default function Header() {
               <Button onClick={moveToAddReview} addAndHeart>
                 <BsClipboardPlus />
               </Button>
-              <Button addAndHeart>
+              <Button onClick={moveToHeartCart} addAndHeart>
                 <BsHeart />
               </Button>
             </AddReviewContainer>
@@ -113,9 +114,6 @@ export default function Header() {
             </CategoryLi>
             <CategoryLi>
               <Link to={'/best-review'}>베스트 리뷰</Link>
-            </CategoryLi>
-            <CategoryLi>
-              <Link to={'/mypage'}>마이 페이지</Link>
             </CategoryLi>
           </CategoryUl>
         </CategoryContainer>

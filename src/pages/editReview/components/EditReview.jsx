@@ -41,7 +41,6 @@ export default function EditReview() {
   // textarea 자동 높이 조절
   const ref = useRef(null);
   const [content, setContent] = useState(getDetailData?.content);
-
   const handleResizeHeight = useCallback((e) => {
     setContent(e.target.value);
     // ref 변수가 null인 경우 함수 종료
@@ -81,11 +80,9 @@ export default function EditReview() {
 
     try {
       const compressedFile = await imageCompression(imageFile, options); // 이미지 압축 수행
-
       const formImg = new FormData(); // FormData 객체 생성
       formImg.append('imageFile', compressedFile); // 압축된 이미지 파일을 FormData 객체에 추가
       setFormImage(formImg); // state 값을 변경하여 FormData 객체를 업데이트
-
       console.log('After Compression: ', compressedFile.size); //압축 후
 
       const fileReader = new FileReader(); // FileReader 객체 생성
@@ -112,9 +109,11 @@ export default function EditReview() {
     },
   });
 
+  const stringToNumPrice =
+    typeof price === 'string' ? Number(price.replace(/,/g, '')) : price;
+
   const submitEditReviewContent = (event) => {
     event.preventDefault();
-    const stringToNumPrice = price ? Number(price.replace(/,/g, '')) : 0;
     const formData = new FormData(); // FormData 객체 생성 (key:value)
     formData.append('token', token); //해당 key와 value를 FormData에 추가
     formData.append('title', title);
