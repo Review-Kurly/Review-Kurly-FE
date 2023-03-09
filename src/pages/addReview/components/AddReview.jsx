@@ -25,7 +25,6 @@ export default function AddReview() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const token = Cookies.get('accessJWTToken');
-
   // textarea 자동 높이 조절
   const ref = useRef(null);
   const [content, setContent] = useState('');
@@ -99,6 +98,8 @@ export default function AddReview() {
     },
   });
 
+  console.log('postReviews ---->', postReviews);
+
   const submitReviewContent = (event) => {
     event.preventDefault();
 
@@ -119,7 +120,7 @@ export default function AddReview() {
       console.log(value);
     }
     postReviews.mutate({ token, data: formData }); // 리뷰 데이터를 서버로 전송
-    navigate('/');
+    navigate(`/detail/${postReviews.data.data.id}`);
   };
 
   const deletePreviewImg = () => {

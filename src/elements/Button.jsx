@@ -41,6 +41,17 @@ const ButtonWrapper = styled.button`
     `}
 
   ${(props) =>
+    props.commentCancle &&
+    css`
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      color: ${(props) => props.theme.CL.brandColor};
+      border: 1px solid ${(props) => props.theme.CL.brandColor};
+      background-color: white;
+    `}
+
+  ${(props) =>
     props.closeModal &&
     css`
       width: 100%;
