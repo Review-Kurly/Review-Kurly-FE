@@ -24,3 +24,14 @@ export const getBestReview = async (sort = '') => {
   );
   return response.data;
 };
+
+// *========== 좋아요 한 리뷰 조회 ==========*
+
+export const getLikeReview = async (token) => {
+  const response = await api.get(`/api/reviews/liked-reviews`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+  return response.data;
+};

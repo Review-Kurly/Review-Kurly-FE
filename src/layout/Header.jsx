@@ -4,17 +4,18 @@ import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { BsHeart, BsClipboardPlus } from 'react-icons/bs';
 import logo from '../styles/img/logo.svg';
-import useInputOnChange from '../feature/hooks/useInputOnChange';
 import Button from '../elements/Button';
 import Cookies from 'js-cookie';
 import { logoutSuccess } from '../redux/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSearchSlice } from '../redux/getSearchSlice';
+
 export default function Header() {
   const navigate = useNavigate();
   const moveToAddReview = () => navigate('/add-review');
   const moveToHome = () => navigate('/');
   const dispatch = useDispatch();
+
   const [search, setSearch] = useState('');
 
   //로그인이 되어있는지 체크하기위해 스토어에서 가져오기
@@ -37,8 +38,10 @@ export default function Header() {
 
   const searchClick = (e) => {
     e.preventDefault();
-    navigate('/search-review');
-    dispatch(getSearchSlice(search));
+    if (search !== '') {
+      navigate('/search-review');
+      dispatch(getSearchSlice(search));
+    }
   };
 
   return (

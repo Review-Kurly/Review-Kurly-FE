@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
 import DetailContainer from '../../feature/detail/DetailContainer';
-
 import styled from 'styled-components';
+import { ReactComponent as SearchImage } from '../../styles/img/searchImage.svg';
 
 export default function SearchView() {
   const searchResult = useSelector((state) => state.searchSlice.data);
@@ -10,19 +10,28 @@ export default function SearchView() {
   // // const error = useSelector((state) => state.searchResult?.error);
 
   useEffect(() => {
-    console.log('searchResult---->', searchResult);
+    console.log('searchResult---->', searchResult?.data.length);
   }, [searchResult]);
 
   return (
     <>
-      <ReviewTitleLayout>신규 리뷰</ReviewTitleLayout>
       {/* 최대값, 최솟값 정렬 버튼 */}
 
       {/* 새로운 리뷰 목록 컴포넌트 리렌더링 */}
-      {searchResult.length !== 0 ? (
-        <DetailContainer getData={searchResult} />
+      {searchResult?.data.length !== 0 ? (
+        <>
+          <ReviewTitleLayout>검색 결과</ReviewTitleLayout>
+          <DetailContainer getData={searchResult?.data} />
+        </>
       ) : (
-        <div>검색 결과가 없습니다.</div>
+        <>
+          <EmptyWrapper>
+            <EmptyResult>
+              <SearchImage />
+              <div>검색 결과가 없습니다.</div>
+            </EmptyResult>
+          </EmptyWrapper>
+        </>
       )}
     </>
   );
@@ -64,4 +73,14 @@ export const ReviewSortButtonLayout = styled.div`
     margin-right: 8px;
     background-color: rgb(226, 226, 226);
   }
+`;
+
+const EmptyWrapper = styled.div`
+  position: fixed;
+  top: 50%;
+  width: 100%;
+`;
+const EmptyResult = styled.div`
+  ${(props) => props.theme.FlexCol}
+  gap: 2rem;
 `;

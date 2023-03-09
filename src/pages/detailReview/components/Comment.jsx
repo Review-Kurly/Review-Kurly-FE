@@ -28,12 +28,11 @@ export default function Comment({ comment, detailData }) {
   //유저 정보 가져옴
   const saveUserInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-  const { isLoading, isError, data } = useQuery(['DetailComment'], () =>
+  const { isLoading, isError, data } = useQuery('DetailComment', () =>
     getDetailComment({ token, reviewId })
   );
   const commentData = data?.data;
 
-  console.log('commentData', commentData);
   //날짜 수정 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -44,7 +43,7 @@ export default function Comment({ comment, detailData }) {
   const addContent = useMutation(
     () => postDetailComment({ token, reviewId, content }),
     {
-      onSuccess: () => queryClient.invalidateQueries(['DetailComment']),
+      onSuccess: () => queryClient.invalidateQueries('DetailComment'),
     }
   );
 
@@ -66,7 +65,7 @@ export default function Comment({ comment, detailData }) {
     } else {
       addContent.mutate(content);
       toggleModal(true);
-      setContent('');
+      setContent(content);
     }
   };
 
@@ -76,7 +75,7 @@ export default function Comment({ comment, detailData }) {
   };
 
   const deleteContent = useMutation(deleteDetailComment, {
-    onSuccess: () => queryClient.invalidateQueries(['DetailComment']),
+    onSuccess: () => queryClient.invalidateQueries('DetailComment'),
     onError: (error) => error,
   });
 

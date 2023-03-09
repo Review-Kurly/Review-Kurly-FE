@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Header from './Header';
 
 const MainWrapper = styled.div`
+  position: relative;
   width: calc(100%);
   height: 100%;
 `;
