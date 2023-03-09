@@ -1,12 +1,13 @@
 import Cookies from 'js-cookie';
 import React from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Spiner from '../../../elements/Spiner';
 import Button from '../../../elements/Button';
 import {
   getDetailReview,
+  myLikeReview,
   removeReview,
 } from '../../../modules/api/detailReviwApi';
 import Comment from './Comment';
@@ -17,6 +18,7 @@ export default function DetailInfoCard() {
   const params = useParams();
   const reviewId = params.id;
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   //리뷰 삭제
   const deleteMustation = useMutation(removeReview, {
@@ -46,6 +48,27 @@ export default function DetailInfoCard() {
   const detailData = data?.data;
   const commentCnt = data?.data.commentCount;
   const isOwned = data?.data.owned;
+  const isLiked = data?.data.liked;
+
+  //좋아요 뮤테이션
+
+  const likeCharMutation = useMutation(myLikeReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getDetailReview');
+    },
+    onError: () => {
+      return;
+    },
+  });
+
+  //좋아요 버튼 핸들러
+  const likeChartBtnHandler = (reviewId) => {
+    likeCharMutation.mutate({ token, reviewId });
+  };
+
+  const editReviewHandler = () => {
+    navigate(`/edit-review/${reviewId}`);
+  };
 
   if (isError) return;
 
@@ -72,7 +95,7 @@ export default function DetailInfoCard() {
                     삭제
                   </Button>
                   <CenterLine />
-                  <Button commentBtn onClick={() => {}}>
+                  <Button commentBtn onClick={editReviewHandler}>
                     수정
                   </Button>
                 </ReviewEditAndDelete>
@@ -107,8 +130,10 @@ export default function DetailInfoCard() {
               <DetailInfoDesc> {detailData?.content}</DetailInfoDesc>
             </DetailInfoLayout>
             <DetailLikeContainer>
-              <Button likeChart>
-                <DetailLikeButtonSpan />
+              <Button likeChart onClick={() => likeChartBtnHandler(reviewId)}>
+                <DetailLikeButtonSpan
+                  className={isLiked === true ? 'liked' : 'unLiked'}
+                />
               </Button>
             </DetailLikeContainer>
           </DetailReviewInfoContainer>
@@ -227,8 +252,14 @@ const DetailLikeButtonSpan = styled.span`
   height: 32px;
   border: 0;
   vertical-align: top;
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K)
-    center center no-repeat;
+  &.liked {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBmaWxsPSIjRkY1QTVBIiBzdHJva2U9IiNGRjVBNUEiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K)
+      center center no-repeat;
+  }
+  &.unLiked {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K)
+      center center no-repeat;
+  }
 `;
 
 const ReviewEditAndDelete = styled.div`

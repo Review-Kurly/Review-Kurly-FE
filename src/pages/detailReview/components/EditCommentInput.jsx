@@ -49,11 +49,6 @@ export default function EditCommentInput(props) {
     queryClient.invalidateQueries('DetailComment');
   };
 
-  const isLiked = commentLikes.data?.data.liked;
-  const likeCount = commentLikes.data?.data.likeCount;
-
-  console.log('isLiked ---->', isLiked, 'likeCount--->', likeCount);
-
   //input 높이 자동 조절 훅
   const { ref, content, setContent, handleResizeHeight } = useAutoHeight(
     props.content

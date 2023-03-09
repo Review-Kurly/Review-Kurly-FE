@@ -33,7 +33,6 @@ export default function Comment({ comment, detailData }) {
   );
   const commentData = data?.data;
 
-  console.log('commentData', commentData);
   //날짜 수정 함수
   const formatDate = (dateString) => {
     const date = new Date(dateString);
