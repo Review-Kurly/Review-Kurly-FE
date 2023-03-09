@@ -32,6 +32,17 @@ export const addReview = async ({ token, data }) => {
   return response.data;
 };
 
+// *========== 상세 페이지 수정 ==========*
+export const editReview = async ({ token, data, reviewId }) => {
+  const response = await api.put(`/api/reviews-details/${reviewId}`, data, {
+    headers: {
+      Authorization: `${token}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
 // *========== 상세 페이지 삭제 ==========*
 export const removeReview = async ({ token, reviewId }) => {
   const response = await api.delete(`/api/reviews-details/${reviewId}`, {
@@ -87,6 +98,21 @@ export const editDetailComment = async ({ token, commentId, content }) => {
 export const commentLike = async ({ token, reviewId, commentId }) => {
   const response = await api.post(
     `/api/comments/likes/${reviewId}/${commentId}`,
+    {},
+    {
+      headers: {
+        Authorization: `${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// *========== 상세 페이지 좋아요 체크 ==========*
+export const myLikeReview = async ({ token, reviewId }) => {
+  console.log('reviewId', reviewId);
+  const response = await api.post(
+    `/api/reviews-details/likes/${reviewId}`,
     {},
     {
       headers: {

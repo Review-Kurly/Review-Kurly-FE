@@ -19,7 +19,7 @@ export default function SearchView() {
       {/* 최대값, 최솟값 정렬 버튼 */}
 
       {/* 새로운 리뷰 목록 컴포넌트 리렌더링 */}
-      {searchResult.length !== 0 ? (
+      {searchResult?.length !== 0 ? (
         <DetailContainer getData={searchResult} />
       ) : (
         <div>검색 결과가 없습니다.</div>
