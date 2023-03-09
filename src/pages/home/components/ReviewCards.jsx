@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
