@@ -14,7 +14,7 @@ import uploadImg from '../../../styles/img/uploadImg.svg';
 import xmark from '../../../styles/img/xmark.svg';
 
 export default function AddReview() {
-  const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =
+  const [{ title, price, market, purchaseUrl, description }, reviewsOnChange] =
     useInputOnChange({
       title: '',
       price: '',
@@ -22,6 +22,9 @@ export default function AddReview() {
       purchaseUrl: '',
       description: '',
     });
+
+  const stringToNumPrice = Number(price.replace(/,/g, ''));
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const token = Cookies.get('accessJWTToken');
@@ -91,22 +94,22 @@ export default function AddReview() {
   const postReviews = useMutation(addReview, {
     onSuccess: (data) => {
       console.log('addreview data --->', data);
-      queryClient.invalidateQueries('getMainpgReview');
+      navigate(`/detail/${data.data.id}`);
     },
     onError: (e) => {
       console.log('addReview Error --->', e);
     },
   });
 
-  console.log('postReviews ---->', postReviews);
+  // console.log('postReviews ---->', postReviews);
 
-  const submitReviewContent = (event) => {
+  const submitReviewContent = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(); // FormData 객체 생성 (key:value)
     formData.append('token', token); //해당 key와 value를 FormData에 추가
     formData.append('title', title);
-    formData.append('price', price);
+    formData.append('price', stringToNumPrice);
     formData.append('market', market);
     formData.append('purchaseUrl', purchaseUrl);
     formData.append('content', content);
@@ -119,8 +122,7 @@ export default function AddReview() {
     for (let value of formData) {
       console.log(value);
     }
-    postReviews.mutate({ token, data: formData }); // 리뷰 데이터를 서버로 전송
-    navigate(`/detail/${postReviews.data.data.id}`);
+    await postReviews.mutate({ token, data: formData }); // 리뷰 데이터를 서버로 전송
   };
 
   const deletePreviewImg = () => {
@@ -176,9 +178,9 @@ export default function AddReview() {
               name="title"
               value={title}
               onChange={reviewsOnChange}
-              type="text"
               placeholder="상품명을 입력해 주세요"
               maxLength={30}
+              required
             />
           </InputLayout>
           <InputLayout>
@@ -187,9 +189,9 @@ export default function AddReview() {
               name="description"
               value={description}
               onChange={reviewsOnChange}
-              type="text"
               placeholder="상품을 간단히 설명해 주세요"
               maxLength={40}
+              required
             />
           </InputLayout>
           <InputLayout>
@@ -198,7 +200,7 @@ export default function AddReview() {
               name="price"
               value={price}
               onChange={reviewsOnChange}
-              type="number"
+              required
               placeholder="가격을 입력해 주세요"
             />
           </InputLayout>
@@ -208,7 +210,7 @@ export default function AddReview() {
               name="market"
               value={market}
               onChange={reviewsOnChange}
-              type="text"
+              required
               placeholder="판매처를 입력해 주세요"
             />
           </InputLayout>
@@ -219,7 +221,7 @@ export default function AddReview() {
               name="purchaseUrl"
               value={purchaseUrl}
               onChange={reviewsOnChange}
-              type="text"
+              required
               placeholder="구매 링크를 입력해 주세요"
             />
           </InputLayout>
@@ -233,6 +235,7 @@ export default function AddReview() {
               onChange={handleResizeHeight}
               placeholder="상세 리뷰를 입력해 주세요"
               maxLength="1500"
+              required
             />
           </InputLayout>
         </AddReviewInputContainer>

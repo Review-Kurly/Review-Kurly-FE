@@ -28,7 +28,6 @@ export default function EditReview() {
   );
 
   const getDetailData = data?.data;
-  console.log(getDetailData);
 
   const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =
     useInputOnChange({
@@ -105,22 +104,21 @@ export default function EditReview() {
 
   const editReviews = useMutation(editReview, {
     onSuccess: (data) => {
-      console.log('addreview data --->', data);
+      navigate(`/detail/${params.id}`);
       queryClient.invalidateQueries('getDetailReview');
     },
     onError: (e) => {
-      console.log('addReview Error --->', e);
       return e;
     },
   });
 
   const submitEditReviewContent = (event) => {
     event.preventDefault();
-
+    const stringToNumPrice = price ? Number(price.replace(/,/g, '')) : 0;
     const formData = new FormData(); // FormData 객체 생성 (key:value)
     formData.append('token', token); //해당 key와 value를 FormData에 추가
     formData.append('title', title);
-    formData.append('price', price);
+    formData.append('price', stringToNumPrice);
     formData.append('market', market);
     formData.append('purchaseUrl', purchaseUrl);
     formData.append('content', content);
@@ -131,7 +129,6 @@ export default function EditReview() {
     }
 
     editReviews.mutate({ token, data: formData, reviewId }); // 리뷰 데이터를 서버로 전송
-    navigate(`/detail/${params.id}`);
   };
 
   //이미지 수정 버튼
@@ -203,9 +200,9 @@ export default function EditReview() {
               name="title"
               value={title}
               onChange={reviewsOnChange}
-              type="text"
               placeholder="상품명을 입력해 주세요"
               maxLength={30}
+              required
             />
           </InputLayout>
           <InputLayout>
@@ -214,9 +211,9 @@ export default function EditReview() {
               name="description"
               value={description}
               onChange={reviewsOnChange}
-              type="text"
               placeholder="상품을 간단히 설명해 주세요"
               maxLength={40}
+              required
             />
           </InputLayout>
           <InputLayout>
@@ -225,7 +222,7 @@ export default function EditReview() {
               name="price"
               value={price}
               onChange={reviewsOnChange}
-              type="number"
+              required
               placeholder="가격을 입력해 주세요"
             />
           </InputLayout>
@@ -235,7 +232,7 @@ export default function EditReview() {
               name="market"
               value={market}
               onChange={reviewsOnChange}
-              type="text"
+              required
               placeholder="판매처를 입력해 주세요"
             />
           </InputLayout>
@@ -246,7 +243,7 @@ export default function EditReview() {
               name="purchaseUrl"
               value={purchaseUrl}
               onChange={reviewsOnChange}
-              type="text"
+              required
               placeholder="구매 링크를 입력해 주세요"
             />
           </InputLayout>
@@ -259,6 +256,7 @@ export default function EditReview() {
               style={{ height: '38px' }}
               onChange={handleResizeHeight}
               placeholder="상세 리뷰를 입력해 주세요"
+              required
               maxLength="1500"
             />
           </InputLayout>
