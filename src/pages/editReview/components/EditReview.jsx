@@ -10,13 +10,13 @@ import Cookies from 'js-cookie';
 import Spiner from '../../../elements/Spiner';
 import { useNavigate, useParams } from 'react-router-dom';
 import uploadImg from '../../../styles/img/uploadImg.svg';
-import xmark from '../../../styles/img/xmark.svg';
 import {
   editReview,
   getDetailReview,
 } from '../../../modules/api/detailReviwApi';
 
 export default function EditReview() {
+  const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const token = Cookies.get('accessJWTToken');
@@ -27,21 +27,21 @@ export default function EditReview() {
     getDetailReview({ token, reviewId })
   );
 
-  const getDetailData = data.data;
-  console.log(getDetailData.description);
+  const getDetailData = data?.data;
+  console.log(getDetailData);
 
   const [{ description, title, price, market, purchaseUrl }, reviewsOnChange] =
     useInputOnChange({
-      title: getDetailData.title,
-      price: getDetailData.price,
-      market: getDetailData.market,
-      purchaseUrl: getDetailData.purchaseUrl,
-      description: getDetailData.description,
+      title: getDetailData?.title,
+      price: getDetailData?.price,
+      market: getDetailData?.market,
+      purchaseUrl: getDetailData?.purchaseUrl,
+      description: getDetailData?.description,
     });
 
   // textarea 자동 높이 조절
   const ref = useRef(null);
-  const [content, setContent] = useState(getDetailData.content);
+  const [content, setContent] = useState(getDetailData?.content);
 
   const handleResizeHeight = useCallback((e) => {
     setContent(e.target.value);
@@ -95,6 +95,7 @@ export default function EditReview() {
       // 미리보기 이미지 URL을 'imageFile' state 값으로 업데이트
       fileReader.onload = () =>
         setImageFile({ viewUrl: String(fileReader.result) });
+      setIsEdit(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -105,10 +106,11 @@ export default function EditReview() {
   const editReviews = useMutation(editReview, {
     onSuccess: (data) => {
       console.log('addreview data --->', data);
-      queryClient.invalidateQueries('getMainpgReview');
+      queryClient.invalidateQueries('getDetailReview');
     },
     onError: (e) => {
       console.log('addReview Error --->', e);
+      return e;
     },
   });
 
@@ -127,16 +129,19 @@ export default function EditReview() {
       // 압축된 이미지 추가 (이미지 파일의 경로와 함께 저장되어 있는 객체)
       formData.append(keyValue[0], keyValue[1]);
     }
-    // FormData 내용 확인
-    for (let value of formData) {
-      console.log(value);
-    }
+
     editReviews.mutate({ token, data: formData, reviewId }); // 리뷰 데이터를 서버로 전송
+    navigate(`/detail/${params.id}`);
   };
+
+  //이미지 수정 버튼
+  const inputRef = useRef(null);
+  const editImgBtnHandler = () => inputRef.current.click();
 
   const deletePreviewImg = () => {
     setImageFile({ imageFile: '', viewUrl: '' });
     document.querySelector('#inputReviewImg').value = '';
+    setIsEdit(true);
   };
 
   if (isError) return;
@@ -149,33 +154,41 @@ export default function EditReview() {
       <AddReviewTitle>상품 리뷰 수정</AddReviewTitle>
       <AddReviewForm onSubmit={submitEditReviewContent}>
         {/* 이미지 미리보기 label */}
-        <AddReviewImageLabel>
-          {imageFile.imageFile !== '' ? (
-            <>
-              <Button
-                resetImg
-                onClick={deletePreviewImg}
-                type="button"
-                bg={xmark}
-              />
-              <ImgPreview src={imageFile.viewUrl} alt="" />
-            </>
-          ) : (
-            <UploadInputWrapper>
-              <UploadImgContainer>
-                <UploadImg src={uploadImg} alt="" />
-              </UploadImgContainer>
-              <UploadImgDesc>
-                <label htmlFor="inputReviewImg">
-                  이곳을 클릭해 <br />
-                  <span>파일을 업로드</span> 하세요.
-                </label>
-              </UploadImgDesc>
-            </UploadInputWrapper>
-          )}
-        </AddReviewImageLabel>
+        <AddReviewImageWrapper>
+          <AddReviewImageLabel htmlFor="inputReviewImg">
+            {getDetailData?.imageUrl &&
+              (isEdit ? (
+                imageFile.imageFile === '' ? (
+                  <UploadInputWrapper>
+                    <UploadImgContainer>
+                      <UploadImg src={uploadImg} alt="" />
+                    </UploadImgContainer>
+                    <UploadImgDesc>
+                      <label htmlFor="inputReviewImg">
+                        이곳을 클릭해 <br />
+                        <span>파일을 업로드</span> 하세요.
+                      </label>
+                    </UploadImgDesc>
+                  </UploadInputWrapper>
+                ) : (
+                  <ImgPreview src={imageFile.viewUrl} alt="" />
+                )
+              ) : (
+                <ImgPreview src={getDetailData?.imageUrl} alt="" />
+              ))}
+          </AddReviewImageLabel>
+          <AddReviewImageBtnWrapper>
+            <Button commentCancle type="button" onClick={deletePreviewImg}>
+              삭제
+            </Button>
+            <Button comment type="button" onClick={editImgBtnHandler}>
+              이미지 등록
+            </Button>
+          </AddReviewImageBtnWrapper>
+        </AddReviewImageWrapper>
 
         <input
+          ref={inputRef}
           id="inputReviewImg"
           type="file"
           accept="image/*"
@@ -285,7 +298,6 @@ const AddReviewImageLabel = styled.label`
   position: relative;
   width: 350px;
   height: 470px;
-  margin-right: 20px;
   border: 1px solid rgb(221, 221, 221);
   border-radius: 1rem;
   overflow: hidden;
@@ -334,4 +346,14 @@ const UploadImgDesc = styled.div`
     color: ${(props) => props.theme.CL.brandColor};
     font-weight: bold;
   }
+`;
+
+const AddReviewImageWrapper = styled.div`
+  ${(props) => props.theme.FlexCol}
+  margin-right: 20px;
+`;
+
+const AddReviewImageBtnWrapper = styled.div`
+  ${(props) => props.theme.FlexRow}
+  margin: 1rem 0;
 `;
