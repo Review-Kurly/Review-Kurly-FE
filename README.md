@@ -42,7 +42,9 @@
 > 슬라이드 형식으로 자연스럽게 출력됩니다. 
 > 헤더에는 검색 버튼, 리뷰등록, 신규리뷰탭, 베스트리뷰탭이 존재하여 사이트를 탐색할 수 있습니다. 
 > 홈 화면 및 신규리뷰 베스트리뷰 상세페이지는 로그인 없이 누구나 탐색이 가능합니다. 
-![](https://velog.velcdn.com/images/vivid0930/post/582c7571-48b2-49ee-ade3-f44a0a7e6fe5/image.jpg)![](https://velog.velcdn.com/images/vivid0930/post/04fb7a4c-ffa6-4b15-a281-94ab5939cc0d/image.jpg)
+![](https://velog.velcdn.com/images/vivid0930/post/582c7571-48b2-49ee-ade3-f44a0a7e6fe5/image.jpg)
+![68747470733a2f2f76656c6f672e76656c63646e2e636f6d2f696d616765732f7669766964303933302f706f73742f30346662376134632d666661362d346231352d613238312d3934616235393339636330642f696d6167652e6a7067](https://user-images.githubusercontent.com/76584961/236683131-32937b77-7203-48b3-99f8-e5811909eb28.jpg)
+
 
 
 ### ✏️ 상품 리뷰 등록
